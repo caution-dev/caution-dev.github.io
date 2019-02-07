@@ -1,0 +1,124 @@
+---
+layout: post
+title:  "Hello Core Data"
+date:   2019-01-31 19:55:19 +0900
+categories: Study
+---
+# Core Data
+## Core Data 소개
+Core Data는 model layer 객체들을 관리하기 위한 **Apple 프레임워크** 입니다.
+  - [Core Data Programming Guide](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/CoreData/index.html#//apple_ref/doc/uid/TP40001075-CH2-SW1)
+
+**영속성**을 포함하여 **객체의 life cycle** 등의 기능을 가진 [객체 그래프 관리자](https://en.wikipedia.org/wiki/Object_graph)의 역할을 수행합니다.
+  - 객체 간의 연결을 설정하고, 연결된 객체가 변경되었을 경우 이에 따른 알림을 발생시킵니다.
+  - 예를 들어, 연결된 객체의 삭제가 발생했을 때의 처리도 설정할 수 있습니다.
+  - **비검색(searchless) 지원** : 객체에 연결되어 있는 데이터를 불러올 때 추가적인 fetch 작업 없이 연결된 객체에 접근가능합니다.
+
+Core Data는 영구저장을 위해 SQLite 를 사용합니다.
+  - SQLite 및 일반적인 DBMS 에서 지원하는 검색, 정렬 등의 기능을 제공합니다.
+  - **SQLite의 Wrapper가 아닙니다.** 동일한 기능을 제공한다 하더라도 SQLite 와 다른 로직으로 수행될 수 있습니다.
+  - 또한 SQLite에서 제공하는 모든 기능을 제공하는 것이 아닙니다. (예: 자동 데이터 증가 attribute)
+  - SQLite는 영속성 유지를 위해 디스크에 데이터를 저장하지만, Core Data는 완전한 **인-메모리** 형태로 사용 가능합니다. 역설하자면 Core Data는 명시적으로 저장 명령을 내릴때까지 디스크에 저장하지 않습니다.
+
+## Core Data vs Database
+
+#### In-memory DB vs on-disk DB
+
+ Core Data 는 반드시 데이터를 메모리에 로딩하는 과정이 필요합니다.
+
+ 따라서 연결된 객체가 많을 경우 한 번에 많은 양의 객체를 사용할 때 DB에 비해 메모리를 비효율적으로 많이 사용해야 할 수 있습니다.
+
+ 예를 들어 데이터 1000 개를 삭제해야 할 경우,
+
+ DB에서는 명령 처리를 위해 각 레코드에 해당하는 작은 크기의 데이터만 메모리에 로드하면 되기 때문에 데이터의 양이 많아도 효율적으로 업데이트가 가능합니다.
+
+> - 데이터 1000 줄을 메모리에 올린다. 데이터 삭제 명령을 시도한다.
+> - foreign key 참조가 되어 있다면 사전에 정의된 작업을 수행한다.
+> - 파일에 저장한다.
+
+ 하지만 코어데이터는 연결된 객체까지 모두 메모리에 올려야 합니다.
+
+ 예를 들어 A-B-C 객체가 연결되어 있을 때, A에 대한 명령을 수행하기 위해 A 객체를 메모리에 로드하면 마찬가지로 B와 C 객체까지 메모리에 업로드해야 합니다.
+
+
+ 반면 메모리에 올라온 다음에 명령 처리는 DB보다 Core Data가 처리속도가 빠를 수 있습니다.
+
+ DB는 명령을 처리할 때마다 영속성을 위해 파일에 데이터를 저장하지만, Core Data는 원하는 시점에 명시적으로 저장해야 파일쓰기를 진행합니다.
+
+ 따라서, 디스크에 영속적으로 저장될 필요 없이 임시 내용을 담는 객체가 필요한 경우, 데이터베이스에 비해 코어데이터가 훨씬 빠른속도로 객체를 생성/수정/조작할 수 있습니다.
+
+> - 1000개의 객체를 메모리에 올린다.
+> - 연결된 객체가 있다면 함께  메모리에 올린다. 그 객체가 또 어딘가에 연결되어 있다면 메모리에 올린다.  ....
+> - 명령을 수행한다.
+> - 저장 명령이 떨어지지 않을 때까지는 저장하지 않는다.
+
+#### Core Data는 로직을 다루지는 않습니다.
+
+- 일반적인 DB에 저장되는 데이터에 대한 제약 조건으로 unique key 설정 기능이 Core Data에는 포함되지 않습니다.
+- 또한 자동 증가되는 attribute를 설정한다던지, 자동 업데이트 등을 지원하지 않습니다.
+- 이러한 기능이 필요하다면 개발자가 Model 클래스에서 직접 구현해야 합니다.
+
+#### Multi-threaded, Multi-user 를 지원하지 않습니다.
+
+- 많은 데이터베이스가 멀티 스레드, 멀티 유저를 지원하는 반면 Core Data는 싱글 스레드만 지원합니다.
+- 필요에 의해 멀티 스레드를 구현해야 한다면 기존 스레드의 데이터를 저장한 뒤 다른 스레드에서 새로운 NSManagedObjectContext를 이용하여 데이터를 읽어들여야 합니다.
+
+## 프로젝트 생성 및 모델 구조 생성
+
+- Project 생성 시에 Use CoreData를 체크하여 사용하면 **xcdatamodeld** 파일이 생성되며, 이 파일에서 사용할 Entity들을 정의할 수 있습니다.
+- .xcdatamodeld는 여러 파일로 나누어 사용할 수 있습니다.
+- .xcdatamodeld 파일에서 Entity의 attributes, Relationships 등을 정의할 수 있습니다.
+- [Creating a Managed Object Model](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/CoreData/KeyConcepts.html#//apple_ref/doc/uid/TP40001075-CH30-SW1)
+- .xcdatamodeld 파일에 정의된 Entity는 동일한 이름을 가진 NSManagedObject Class와 대응됩니다. .xcdatamodeld 에 Entity를 정의할 경우 빌드타임에 자동으로 이 Class가 생성합니다.
+
+## Core Data 관련 Class 및 파일 설명
+
+#### NSPersistentContainer
+
+  NSPersistentContainer 는 Core Data에서 정보를 저장하고, 검색하는 것을 용이케 하는 개체들의 집합입니다. NSPersistentContainer는 상태를 관리하는 객체와 Data Model을 나타내는 객체등을 포함합니다.
+
+ 프로젝트 생성 시 Use Core Data 를 선택하면 Xcode가 AppDelegate.swift에 NSPersistentContainer 에 관련한 코드를 작성해줍니다.
+
+#### NSManagedObjectContext
+
+ Core Data 에서 사용되는 객체들은 메모리에 올라가 있습니다. 이 객체들에 대해 접근하고 작업 (데이터 추가, 수정, 삭제, 검색)할 때 이 context가 필요합니다. 변경사항은 모두 NSManagedObjectContext에 임시적으로 저장됩니다. 따라서 앱이 꺼지거나, 데이터를 저장해야 한다면 반드시 명시적으로 이 Context를 저장해야 합니다.
+
+#### NSPersistentStoreCoordinator
+
+NSManagedObjectModel과 NSPersistentContainer 사이의 중간다리 역할을 합니다. 이 요소는 NSManagedObjectModel에 대한 정보를 알고 있고 이를 어떻게 NSPersistentStore에 저장해야 하는지, 어떻게 불러온 데이터를 담아야 하는 지에 대해 알 고 있습니다.
+
+#### NSManagedObjectModel
+
+ Core Data에 저장된 단일 객체를 나타냅니다. Core Data가 파일에 저장된 데이터를 읽어올 때 이 Model을 사용합니다. 따라서 .xcdatamodeld 에서 정의한 속성 및 관계에 대응해야합니다.
+
+#### NSFetchedResultsController
+
+ Core Data에 의해 뒷받침되는 데이터 소스와 테이블 뷰를 동기화하는 데 필요한 코드들을 포함하고 있습니다. NSFetchedResultsController를 사용하면 UITableView 와 Core Data를 사용하는데 매우 용이합니다.
+
+### 작성 파일  
+
+#### Core Data Stack
+
+ Core Data Stack은 Core Data 초기화 시에 접근되며 응용 프로그램과 외부 데이터 저장소의 객체를 중재하는 프레임 워크 객체의 모음입니다.
+ Core Data Stack에서 외부 데이터 저장소와의 모든 상호 작용을 처리하여 응용 프로그램이 비즈니스 논리에 집중할 수 있도록 합니다.
+ Core Data Stack은 관리 대상 객체 컨텍스트 (NSManagedObjectContext), 영구 저장소 조정자 (NSPersistentStoreCoordinator), 관리 객체 모델 (NSManagedObjectModel) 및 영구 컨테이너 (NSPersistentContainer)의 네 가지 기본 객체로 구성됩니다.
+
+### SampleCoreDataViewController
+
+Journal Entity를 조회/추가/삭제 할 수 있는 샘플 ViewController입니다. NSFetchedResultsController 를 적용하여 구현하였습니다.
+
+### Services Group
+
+ Entry, Jouranl, Content Entity들에 대응하는 API를 구현해 놓은 클래스입니다. 이 서비스를 통해 Core Data에 접근하고 데이터를 저장할 수 있습니다.
+
+### Unit Test
+
+ Service class 에 대응하는 unit test를 작성하였습니다. 여기에서 Service Class들을 사용하는 방법을 확인할 수 있습니다.
+
+## 참고링크
+
+[CoreData vs DBMS](https://www.letmecompile.com/%EC%BD%94%EC%96%B4%EB%8D%B0%EC%9D%B4%ED%84%B0core-data%EC%99%80-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%B2%A0%EC%9D%B4%EC%8A%A4%EC%9D%98-%EC%B0%A8%EC%9D%B4/)
+
+[Apple CoreData Programing Guide](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/CoreData/index.html#//apple_ref/doc/uid/TP40001075-CH2-SW1)
+
+[그래프 데이터베이스](https://ko.wikipedia.org/wiki/%EA%B7%B8%EB%9E%98%ED%94%84_%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%B2%A0%EC%9D%B4%EC%8A%A4)

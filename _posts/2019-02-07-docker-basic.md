@@ -1,3 +1,9 @@
+---
+layout: post
+title:  "Hello Docker"
+date:   2019-02-07 15:00:19 +0900
+categories: Study
+---
 # 한영님과 함께하는 Docker 기초!
 
 ### 참고 문서
@@ -17,7 +23,7 @@ $ brew list
 $ python3 --version
 ```
 
-python 은 기본적으로 python version 2 를 말하고 python3 는 version 3를 말한다! 
+python 은 기본적으로 python version 2 를 말하고 python3 는 version 3를 말한다!
 
 python에서 소프트웨어 관리하는 패키지 관리 시스템인 pip(Python Package Index)도 pip 는 version 2, pip3 는 version 3 를 말한다.
 
@@ -32,7 +38,7 @@ python에서 소프트웨어 관리하는 패키지 관리 시스템인 pip(Pyth
 얘는 왜 만들어보냐면 도커가 개발환경에 필요한 패키지들을 묶어서 이미지화 하고 그걸 이용해서 동일한 환경을 복제하기 쉽도록 만들어주는데 이미 이전부터 pip3 freeze / install 을 이용하면 패키지 목록을 파일에 저장하고 이 파일을 이용해서 패키지들을 재설치 할 수 있었다. 이런게 있었다 + 뒤에 가서 쓸거다.
 
 * **pip3 list** : 현재 환경에 설치된 패키지 목록 조회
-* **pip3 freeze** : 현재 환경 내에 설치된 패키지 목록을 특정 파일에 기록 
+* **pip3 freeze** : 현재 환경 내에 설치된 패키지 목록을 특정 파일에 기록
 * **pip3 install** : 파일에 저장된 패키지 목록을 설치
 
 ```shell
@@ -57,7 +63,7 @@ $ pip3 install requirements.txt
 $ django-admin startproject blog
 ```
 
-위 명령어로 쟝고 템플릿 프로젝트를 생성할 수 있다. 프로젝트 이름이 blog! 
+위 명령어로 쟝고 템플릿 프로젝트를 생성할 수 있다. 프로젝트 이름이 blog!
 
 만들어진 프로젝트는 기본적으로 다음과 같은 구조를 가진다.
 
@@ -194,7 +200,7 @@ CMD         python manage.py runserver 0:8000
 
 한 줄 씩 설명하자면 다음과 같다.
 
-> 이 Docker Image는 python:3.7.2-slim 을 사용한다. python:3.7.2-slim 이미지에 Dockerfile이 있다면 거기에 정의된 명령어들을 수행할거다! 
+> 이 Docker Image는 python:3.7.2-slim 을 사용한다. python:3.7.2-slim 이미지에 Dockerfile이 있다면 거기에 정의된 명령어들을 수행할거다!
 >
 > MAINTAINER : 이 Docker Image를 관리하는 관리자의 이메일 주소다!
 >
@@ -208,7 +214,7 @@ CMD         python manage.py runserver 0:8000
 >
 > CMD : 컨테이너가 시작되었을 때 수행할 명령. Dockerfile에서 한 번만 사용할 수 있다. 여기서는 서버를 띄운다.
 
-Dockerfile을 다 만들었으면 이제 Docker Build 를 수행하여 Docker Image를 만든다. 
+Dockerfile을 다 만들었으면 이제 Docker Build 를 수행하여 Docker Image를 만든다.
 
 ```shell
 $ docker build -t blog .
@@ -262,4 +268,3 @@ $ docker run --rm -it -p 7999:8000 blog
 이제 localhost:7999 를 열면? 로케트가 아닌 **Hello Django!** 가 나올거다!
 
 우와! 이제 제대로 **로컬**에서 Docker를 써봤다. 하지만 우리는 로컬서버를 돌리는 게 아니니까 (....) 의미가 없……진 않지만 실제 서버처럼 해보자. 한영님은 EC2를 이용하기로 했으니까 해본다.
-
