@@ -4,15 +4,11 @@ title: About
 permalink: /about/
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](https://jekyllrb.com/)
+안녕하세요, caution의 블로그에 오신 것을 환영합니다.
+Welcome to caution's blog!
 
-You can find the source code for Minima at GitHub:
-[jekyll][jekyll-organization] /
-[minima](https://github.com/jekyll/minima)
+저는 개발자이며, 현재는 iOS 개발을 하고 있습니다.
+I'm a programmer, and working iOS development.
 
-You can find the source code for Jekyll at GitHub:
-[jekyll][jekyll-organization] /
-[jekyll](https://github.com/jekyll/jekyll)
-
-
-[jekyll-organization]: https://github.com/jekyll
+저에 대해 궁금하신 점이 있으시다면 언제든지 [메일](mailto:caution.dev@gmail.com?subject=Mail%20from%20git-blog)주세요!
+If you have any questions, please [email me](mailto:caution.dev@gmail.com?subject=Mail%20from%20git-blog)!

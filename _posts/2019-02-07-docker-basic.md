@@ -243,11 +243,12 @@ docker run --rm -it -p 7999:8000 blog
 FROM        python:3.7.2-slim
 MAINTAINER  caution.dev@gmail.com
 
-COPY        mysite/requirements.txt     /tmp/requirements.txt
+COPY        blog/requirements.txt     /tmp/requirements.txt
 RUN         pip install -r /tmp/requirements.txt
 
 COPY        .     /root/app
 WORKDIR     /root/app/blog
+
 
 CMD         python manage.py runserver 0:8000
 ```
@@ -268,3 +269,118 @@ $ docker run --rm -it -p 7999:8000 blog
 이제 localhost:7999 를 열면? 로케트가 아닌 **Hello Django!** 가 나올거다!
 
 우와! 이제 제대로 **로컬**에서 Docker를 써봤다. 하지만 우리는 로컬서버를 돌리는 게 아니니까 (....) 의미가 없……진 않지만 실제 서버처럼 해보자. 한영님은 EC2를 이용하기로 했으니까 해본다.
+
+## EC2 만들기
+
+
+
+
+
+ec2 인스턴스를 만들자
+
+보안그룹을 http 와 ssh 를 같이 열어주자
+
+https://docs.aws.amazon.com/ko_kr/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html
+
+
+
+## .pem 파일 관리
+
+.pem 파일은 인증에 사용되는 key 파일입니다. aws에 접속할 때 필요합니다! 이런 인증에 필요한 키 파일이나 인증서 파일은 ~/.ssh 에 옮겨서 관리합시다~! 그리고 키 파일이니까 권한 설정을 바꿔줍시다.
+
+https://docs.aws.amazon.com/ko_kr/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair
+
+```perl
+chmod 400 /path/my-key-pair.pem
+```
+
+
+
+dns ipv4 : ec2-13-55-8-215.ap-southeast-2.compute.amazonaws.com
+
+```perl
+ssh -i cocozzang.pem ubuntu@ec2-13-55-8-215.ap-southeast-2.compute.amazonaws.com
+```
+
+#### DisallowedHost at / 문제
+
+특정 호스트 이름으로 접속했을 때만 정상적으로 보여주도록 제한합니다
+
+```perl
+vi blog/settings.py
+```
+
+```python
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
+
+ALLOWED_HOSTS = ['.amazonaws.com']
+```
+
+비어있다는 건 로컬 상에서만 돌릴 때! 그때는 오류가 안됩니당 :-)
+
+도메인을 정확히 적어도 되지만 ``` '.amazonaws.com' ```정도만 적어줘도 괜찮습니다.
+
+> ls -al 명령어를 입력했을 때 요렇게 나와요!
+>
+> ```perl
+> -rwxr-xr-x 1 ubuntu ubuntu  538 Feb  6 08:15 manage.py*
+> drwxrwxr-x 3 ubuntu ubuntu 4096 Feb  6 08:19 mysite/
+> ```
+>
+> 
+
+EC2에서 Docker를 사용해 서버 띄워보기
+
+- [설치](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
+
+- ```
+    sudo apt update
+    sudo apt install \
+        apt-transport-https \
+        ca-certificates \
+        curl \
+        gnupg-agent \
+        software-properties-common
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    sudo add-apt-repository \
+       "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+       $(lsb_release -cs) \
+       stable"
+    sudo apt update
+    sudo apt install docker-ce docker-ce-cli
+  ```
+
+
+
+### 로컬에 있는 소스코드를 가져와서 EC2에 배포한다.
+
+* ** scp**를 사용해 EC2로 파일 복사하기
+  * `scp -i ~/.ssh/<PEM_FileName>.pem -r . ubuntu@<EC2_Public_Domain>:/home/ubuntu/docker/`
+
+-r 재귀적
+
+. 현재위치
+
+ubuntu@<Publid Domain>
+
+
+
+sudo docker build -t mashup -f Dockerfile 
+
+sudo docker un --rm -it -p 80:80 mashup
+
+ALLOWED_HOSTS = ['.amazonaws.com', 'loclhost'        ]
+
+docker build -t mashup .
+
+docker images
+
+docker tag mashup cocozzang/mashup-docker-example
+
+docker push cocozzang/mashup-docker-example
+
+
+
+sudo docker run --rm -it -p 80:8000 cocozzang/mashup-docker-example
+
