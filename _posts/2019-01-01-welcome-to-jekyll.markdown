@@ -3,7 +3,11 @@ layout: post
 title:  "Hello Jekyll, It's me! Caution!"
 date:   2019-01-01 19:55:19 +0900
 categories: Notice
+tags: Welcome notice
+author: Juhee Kim
+mathjax: true
 ---
+
 # 안녕하세요, caution입니다.
 
 첫 포스팅이에요 >_<

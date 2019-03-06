@@ -3,7 +3,9 @@ layout: post
 title:  "2018 WWDC 정리 : High Performance Auto Layout"
 date:   2019-02-11 17:38:19 +0900
 categories: WWDC
-
+tags: iOS WWDC Apple 번역
+author: Juhee Kim
+mathjax: true
 ---
 
 ## 2018 WWDC 정리 : High Performance Auto Layout
@@ -18,7 +20,7 @@ Render Loop는 매초 120 회 실행되는 프로세스입니다. Reder loop를 
 
 ![image-20190218174254553](/Users/juhee/Library/Application Support/typora-user-images/image-20190218174254553.png)
 
-이러한 함수들은 매 프레임마다 호출될 수 있으며, 1 초에 120 프레임을 실행하기 때문에 위와 같은 케이스에서는 많은 문제가 발생할 수 있습니다. 
+이러한 함수들은 매 프레임마다 호출될 수 있으며, 1 초에 120 프레임을 실행하기 때문에 위와 같은 케이스에서는 많은 문제가 발생할 수 있습니다.
 
 * Render loop는 필요하다면 유용하지만, 너무 많이 호출되니까 너무 민감한 코드는 쓰지말고 이왕이면 Interface Builder 를 사용하자.
 * 코드로 작성한다면 매번 Constraint 를 새로 작성하지 말고 Constraint 가 작성되는 부분은 한 번만 호출되도록 변경하자.

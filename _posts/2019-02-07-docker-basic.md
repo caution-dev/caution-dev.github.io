@@ -3,6 +3,9 @@ layout: post
 title:  "Hello Docker"
 date:   2019-02-07 15:00:19 +0900
 categories: Study
+tags: Docker Web Django
+author: Juhee Kim
+mathjax: true
 ---
 # 한영님과 함께하는 Docker 기초!
 
@@ -328,7 +331,7 @@ ALLOWED_HOSTS = ['.amazonaws.com']
 > drwxrwxr-x 3 ubuntu ubuntu 4096 Feb  6 08:19 mysite/
 > ```
 >
-> 
+>
 
 EC2에서 Docker를 사용해 서버 띄워보기
 
@@ -366,7 +369,7 @@ ubuntu@<Publid Domain>
 
 
 
-sudo docker build -t mashup -f Dockerfile 
+sudo docker build -t mashup -f Dockerfile
 
 sudo docker un --rm -it -p 80:80 mashup
 
@@ -383,4 +386,3 @@ docker push cocozzang/mashup-docker-example
 
 
 sudo docker run --rm -it -p 80:8000 cocozzang/mashup-docker-example
-
