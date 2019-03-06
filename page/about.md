@@ -1,7 +1,9 @@
 ---
 layout: page
-title: About
-permalink: /about/
+title: Info
+permalink: /Info/
+icon: archive
+type: page
 ---
 
 안녕하세요, caution의 블로그에 오신 것을 환영합니다.
