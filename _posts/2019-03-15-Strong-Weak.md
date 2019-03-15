@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Strong Weak 참조"
-date:   2019-03-15 17:26:06 +0900
+date:   2019-03-15 23:26:06 +0900
 categories: Swift
 tags: iOS 면접준비 strong weak Swift
 author: Juhee Kim
@@ -66,8 +66,8 @@ weak와 unowned는 약한 참조로 참조가 일어나더라도 Reference Count
 ``` swift
 class Parent {
   let name: String
-  init(name: String) { self.name = name }
   var child: Child?
+  init(name: String) { self.name = name }
 }
 
 class Child {
@@ -85,12 +85,12 @@ Child의 parent 프로퍼티를 weak 로 선언해주었습니다. 이렇게 wea
 #### 그렇다면 왜 모든 변수를 weak로 선언하지 않나요?
 class는 참조 타입입니다. 여러 변수가 하나의 인스턴스를 참조하고 있을 수 있습니다. 만약 모든 변수가 weak로 설정되어 있다면, 어느 한 변수에서 nil로 변환되거나 ARC에 의해서 메모리 해제가 발생했을 때, 의도치 않게 다른 참조 또한 nil로 변할 수 있습니다.
 
-모든 참조를 약한 참조로 변경했습니다. 그리고 학교에 보내기 위해서 Student라는 클래스를 만들었습니다.
+모든 참조를 약한 참조로 변경했습니다. 
 ```swift
 class Parent {
     let name: String
-    init(name: String) { self.name = name }
     weak var child: Child?
+    init(name: String) { self.name = name }
 }
 
 class Child {
@@ -125,5 +125,5 @@ print(parent?.child?.name)
 
  따라서 unowned를 사용할 때에는 이 값이 nil인지 아닌지를 체크해서 사용해야 합니다.
 
- ### 참조
+### 참조
  * [ARC Summary](http://minsone.github.io/mac/ios/swift-automatic-reference-counting-summary)

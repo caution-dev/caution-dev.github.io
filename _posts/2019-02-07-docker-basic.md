@@ -2,7 +2,7 @@
 layout: post
 title:  "Hello Docker"
 date:   2019-02-07 15:00:19 +0900
-categories: Study
+categories: Web
 tags: Docker Web Django
 author: Juhee Kim
 mathjax: true
