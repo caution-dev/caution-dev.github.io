@@ -16,7 +16,7 @@ iOS 에서 앱은 5 가지의 상태로 구분이 가능하며 항상 하나의 
 * Not Running :  앱이 실행되지 않았거나, 시스템에서 종료되었습니다.
 * In-Active : 앱이 Foreground에서 실행중이지만, 이벤트를 받을 수 없습니다. 대개 이 상태에 잠시 머물렀다가 다른 상태로 전이됩니다.
 * Active : 일반적으로 앱이 화면에 떠 있을 때의 상태입니다. 이벤트를 받을 수 있습니다.
-* Background : 앱이 백그라운드에서 코드를 실행하고 있습니다. 대부분의 앱은 일시 중지 상태로 잠시 이 상태가됩니다. 그러나 추가 실행 시간을 요청하는 앱은 일정 기간 동안 이 상태로 남아있을 수 있습니다. 또한 백그라운드로 직접 실행되는 앱은 비활성 상태 대신 이 상태로 전환됩니다. 
+* Background : 앱이 백그라운드에서 코드를 실행하고 있습니다. 대부분의 앱은 일시 중지 상태로 잠시 이 상태가됩니다. 그러나 추가 실행 시간을 요청하는 앱은 일정 기간 동안 이 상태로 남아있을 수 있습니다. 또한 백그라운드로 직접 실행되는 앱은 비활성 상태 대신 이 상태로 전환됩니다.
 * Suspended : 앱이 백그라운드에 있지만 코드를 실행하지 않습니다. 시스템은 앱을 자동으로 이 상태로 이동시키고 그렇게하기 전에 앱에 알리지 않습니다. 일시 중지 된 앱은 메모리에 남아 있지만 코드는 실행하지 않습니다. 메모리 부족 상태가 발생하면 시스템은 예고없이 일시 중단 된 앱을 제거하여 메모리를 확보합니다.
 
 ![image-20190313203353909](https://docs-assets.developer.apple.com/published/f5ae1a0785/00b28327-17dc-4f0c-866f-29f854edfce3.png))
@@ -36,7 +36,7 @@ iOS 에서 앱은 5 가지의 상태로 구분이 가능하며 항상 하나의 
 
 ## 상태 변화에 따라 다른 동작을 처리하기 위한 Delegate 메서드
 
-*  application:willFinishLaunchingWithOptions: 앱 런칭이 끝나기 전 불리는 메소드로, 앱 런칭 타임에서 코드를 실행할 수 있는 첫 번째 시점입니다. 
+*  application:willFinishLaunchingWithOptions: 앱 런칭이 끝나기 전 불리는 메소드로, 앱 런칭 타임에서 코드를 실행할 수 있는 첫 번째 시점입니다.
 * application:didFinishLaunchingWithOptions : 앱 런칭 시점에서 Application 단의 초기화 작업등을 수행할 수 있습니다.
 * applicationDidBecomeActive : Active 상태로 전이 될 때 호출됩니다. Background 상태의 앱이 다시 호출되어 Active 상태가 되도 호출됩니다.
 * applicationWillResignActive : 앱이 Active 상태를 벗어나기 전에 호출됩니다. (ex. 홈 버튼을 누르면 호출됨) 단, 앱이 Background 상태로 전이된다는 보장은 없습니다. In-Active에 잠깐 머물다가 다시 바로 Active 상태로 바뀔 수도 있습니다.
@@ -48,39 +48,39 @@ iOS 에서 앱은 5 가지의 상태로 구분이 가능하며 항상 하나의 
 
 - 시나리오 1. 사용자가 앱을 실행합니다.
 
-  1. Not Running 
-  2. In-Active 
+  1. Not Running
+  2. In-Active
      * application:willFinishLaunchingWithOptions
      * application:didFinishLaunchingWithOptions
 
   3. Active
-     * applicationDidBecomeActive 
+     * applicationDidBecomeActive
 
 - 시나리오 2. 앱 실행 도중 홈 버튼을 누릅니다.
 
   1. Active
      * applicationWillResignActive
   2. In-Active >> Background
-     - applicationDidEnterBackground 
+     - applicationDidEnterBackground
 
 - 시나리오 3. 앱을 다시 켭니다.
 
   1. Background
      - applicationWillEnterForeground
   2. Active
-     - applicationDidBecomeActive 
+     - applicationDidBecomeActive
 
-- 시나리오 4. 앱이 백그라운드에 있다가 Suspended 상태로 전이됩니다. 
+- 시나리오 4. 앱이 백그라운드에 있다가 Suspended 상태로 전이됩니다.
 
   1. Active
      * applicationWillResignActive
   2. In-Active >> Background
      * applicationDidEnterBackground
-  3. Suspended 
+  3. Suspended
 
 ## Backgound 상태에서 할 수 있는 작업
 
-![image-20190314162850542](/Users/juhee/Project/Blog/images/image-20190314162850542.png)
+![image-20190314162850542](../images/image-20190314162850542.png)
 
 | Xcode background Mode            | UIBackgroundModes 값 | 설명                                                         |
 | -------------------------------- | -------------------- | ------------------------------------------------------------ |
