@@ -6,8 +6,11 @@ categories: iOS
 tags: iOS 면접준비
 author: Juhee Kim
 mathjax: true
-
+comments: true
 ---
+
+* content
+{:toc}
 
 ## Applicsation state
 

@@ -2,12 +2,16 @@
 layout: post
 title:  "Hello Core Data"
 date:   2019-01-31 19:55:19 +0900
-categories: Study
-tags: Coredata Apple-framework iOS 
+categories: study
+tags: Coredata Apple-framework iOS
 author: Juhee Kim
 mathjax: true
+comments: true
 ---
-# Core Data
+
+* content
+{:toc}
+
 ## Core Data 소개
 Core Data는 model layer 객체들을 관리하기 위한 **Apple 프레임워크** 입니다.
   - [Core Data Programming Guide](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/CoreData/index.html#//apple_ref/doc/uid/TP40001075-CH2-SW1)
