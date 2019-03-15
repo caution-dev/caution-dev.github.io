@@ -1,9 +1,9 @@
 ---
 layout: post
-title:  "Strong Weak"
+title:  "Strong Weak 참조"
 date:   2019-03-15 17:26:06 +0900
-categories: iOS
-tags: iOS 면접준비 strong weak
+categories: Swift
+tags: iOS 면접준비 strong weak Swift
 author: Juhee Kim
 mathjax: true
 comments: true
@@ -12,4 +12,118 @@ comments: true
 * content
 {:toc}
 
-strong week!!!!s
+안녕하세요! caution입니다.
+혹시 값 타입과 참조 타입의 차이를 아시나요? 아니면 swift의 class와 struct의 차이를 아시나요?(모르겠다면 [클릭]())
+오늘 우리가 말하려고 하는 건 참조 타입 객체를 사용할 때 강한 참조, 약한 참조 중 어떤 걸 써야하는지에 대한 이야기입니다.
+
+먼저 예를 들어보겠습니다. 부모(Parent)와 자식(Child) 클래스가 있다고 생각해보겠습니다.
+``` swift
+class Parent {
+  let name: String
+  init(name: String) { self.name = name }
+  var child: Child?
+}
+
+class Child {
+  let name: String
+  var parent: Parent?
+  init(name: String, parent: Parent) {
+    self.name = name
+    self.parent = parent
+  }
+}
+```
+부모는 자식을 가지고, 자식은 부모를 가질 수 있죠. 하지만 안타깝게도 부모와 자식 모두 서로를 상실(?)할 수 있기 때문에 optional type으로 선언했습니다.
+그럼 이제 부모와 자식을 만들어고 연결해줍시다.
+``` swift
+var parent: Parent? = Parent(name: "가상부모")
+var child: Child? = Child(name: "가상아이", parent: parent)
+parent.child = child
+```
+ 자 이 작업을 자세히 살펴봅시다. 첫 번째 줄에서 Parent 인스턴스를 만들었고, parent가 이 인스턴스를 **참조**하게 만들었습니다. 이때 Parent 인스턴스 대한 Reference Count 가 1로 올라갑니다. 두 번째 줄에서 Child 객체를 만들었고 child가 **참조**하고 있으니 마찬가지로 Child 객체의 Reference count는 1로 올라갑니다.
+
+ 하지만 주의해야할 것은 Child 인스턴스를 초기화하면서 parent 인스턴스 프로버티가 Parent 인스턴스를 참조하도록 설정해주었다는 것입니다. 이 작업을 통해서 Parent 인스턴스를 Reference Count는 2로 올라갑니다.
+그리고 세 번째 줄에서 다시 한 번 Parent 인스턴스의 child 프로퍼티에 방금 생성한 Child 인스턴스를 참조하도록 합니다. 이를 통해 Child의 Reference count 또한 2로 올라갑니다.
+
+우리가 참조할 때에 weak나 unowned와 같은 참조타입을 명시해주지 않았기 때문에 이 두 인스턴스는 기본적으로 서로를 strong 하게 참조하고 있습니다.
+
+이 상태에서, 우리가 선언했던 parent 와 child를 모두 nil로 바꾸면 어떻게 될까요?
+``` swift
+parent = nil
+child = nil
+```
+일단 변수 parent, child 에서 인스턴스에 대한 참조가 해제되었습니다. 그래서 Parent와 Child는 사실상 논리적으로는 아무도 참조하고 있지 않기 때문에 **메모리 해제**가 이루어져야하지만, Reference count가 2에서 1로 떨어졌기 때문에 여전히 1이 남아있어 ARC에 의한 해제가 발생하지 않습니다.
+두 인스턴스가 서로를 **강하게 참조**하고 있기 때문이죠. 둘 중 어떤 것을 해제하려고 하더라도 다른 것에서 참조하고 있다고 인식되게 됩니다.
+
+이 문제를 해결하려면 어떻게 해야할까요?
+
+### 강한 참조, 약한 참조, 미소유 참조
+참조 타입을 참조하는 방식에는 3가지가 있습니다. **strong, weak, unowned**
+기본적으로 프로퍼티를 선언할 때 weak 나 unowned를 선언하지 않으면 기본 값은 strong입니다.
+weak와 unowned는 약한 참조로 참조가 일어나더라도 Reference Count를 증가시키지 않습니다.
+
+앞선 class들을 다시 변경해봅시다.
+``` swift
+class Parent {
+  let name: String
+  init(name: String) { self.name = name }
+  var child: Child?
+}
+
+class Child {
+  let name: String
+  weak var parent: Parent?
+  init(name: String, parent: Parent) {
+    self.name = name
+    self.parent = parent
+  }
+}
+```
+Child의 parent 프로퍼티를 weak 로 선언해주었습니다. 이렇게 weak 참조로 변하게 되면, 참조하고 있는 인스턴스가 메모리 해제를 시도하려고 할 때(nil 로 변환될 때), 이 값은 자동으로 **nil**로 변하게 됩니다. 즉 **메모리 해제를 방해하지 않습니다**.
+그렇기 때문에 약한 참조방식은 상수(let)이 아닌 변수(var)에서만 가능하며, nil로 변할 수 있기에 optional 타입만 허용됩니다.
+
+#### 그렇다면 왜 모든 변수를 weak로 선언하지 않나요?
+class는 참조 타입입니다. 여러 변수가 하나의 인스턴스를 참조하고 있을 수 있습니다. 만약 모든 변수가 weak로 설정되어 있다면, 어느 한 변수에서 nil로 변환되거나 ARC에 의해서 메모리 해제가 발생했을 때, 의도치 않게 다른 참조 또한 nil로 변할 수 있습니다.
+
+모든 참조를 약한 참조로 변경했습니다. 그리고 학교에 보내기 위해서 Student라는 클래스를 만들었습니다.
+```swift
+class Parent {
+    let name: String
+    init(name: String) { self.name = name }
+    weak var child: Child?
+}
+
+class Child {
+    let name: String
+    weak var parent: Parent?
+    init(name: String, parent: Parent?) {
+        self.name = name
+        self.parent = parent
+    }
+}
+```
+
+코드를 조금 변경해보죠. Child를 변수에 참조시키지 않고 바로 Parent의 프로퍼티에 담아보겠습니다.
+```Swift
+let parent: Parent? = Parent(name: "가상부모")
+parent?.child = Child(name: "가상아이", parent: parent)
+print(parent?.child?.name)
+```
+결과는 어떨까요? Child 인스턴스가 잘 살아있다면 ```가상아이```가 나타나야 하겠지만 결과는 ```nil```이 나옵니다.
+왜 그럴까요? Xcode에서 이 코드를 작성하게 되면 다음과 같은 오류를 발생시킵니다.
+> Instance will be immediately deallocated because property 'child' is 'weak'
+
+약한 참조는 Reference count 를 증가시키지 않습니다. 그렇기 때문에 Child 인스턴스가 만들어졌지만 RC가 0이기 때문에 언제든지 ARC에 의해서 dealloc될 수 있습니다.
+
+위의 문제를 해결하려면 어떻게 해야할까요?
+간단합니다. Parent의 child property를 강한 참조로 변경해주면 문제가 해결됩니다.
+**강한 참조가 약한 참조보다 나쁘다는 것이 아니라, 순환참조를 해결하기 위해 약한 참조를 사용**합니다.
+
+#### 그럼 unowned는 뭔가요?
+마찬가지로 RC를 증가시키지 않는 참조법이지만, Optional 타입이 아닐 때 사용할 수 있습니다.
+주의해야할 점은 메모리 해제가 이루어진 뒤 미소유 참조에 그대로 접근하게 되면 런타임 에러가 발생할 수 있습니다.
+
+ 따라서 unowned를 사용할 때에는 이 값이 nil인지 아닌지를 체크해서 사용해야 합니다.
+
+ ### 참조
+ * [ARC Summary](http://minsone.github.io/mac/ios/swift-automatic-reference-counting-summary)

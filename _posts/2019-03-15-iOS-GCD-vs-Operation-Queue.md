@@ -135,6 +135,78 @@ DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {}
 DispatchQueue.main.asyncAfter(deadline: .now() + .miliseconds(100)) {}
 ```
 
+### Serial, Concurrent, sync, async
+Serial과 Concurrent의 차이는 직렬 Queue와 병렬 Queue의 차이를 가집니다.
+* sync : 큐에 작업을 추가한 후, 추가된 작업이 종료될 때 까지 기다립니다.
+sync의 경우 하나의 작업이 Queue에서 빠져나갈 때까지 기다리기 때문에, Serial 이냐 Concurrent냐의 차이는 없습니다. sync로 모든 작업을 Queue에 넣을 경우 그 **순서가 보장됩니다**.
+
+* aync : 큐에 작업을 추가하고, 이 작업의 완료 여부와 관계없이 다음 명령을 실행합니다.
+두 개의 Serial Queue 가 있고 여기에 작업을 각각 따로 넣어본다면 어떨까요?
+```swift
+DispatchQueue(label: "first").async { print("1") }
+DispatchQueue(label: "second").async { print("2") }
+DispatchQueue(label: "first").async { print("3") }
+DispatchQueue(label: "second").async { print("4") }
+DispatchQueue(label: "first").async { print("5") }
+DispatchQueue(label: "second").async { print("6") }
+```
+그 결과는 실행할 때마다 달라집니다. 하지만 Serial, 직렬 큐이기 때문에 1 > 3 > 5, 2 > 4 > 6 의 순서는 보장됩니다.
+중간에 sleep을 넣으면 어떻게 될까요?
+```swift
+DispatchQueue(label: "first").async { print("1") }
+DispatchQueue(label: "second").async {
+    print("2 start")
+    sleep(5)
+    print("2 end")
+}
+DispatchQueue(label: "first").async { print("3") }
+DispatchQueue(label: "second").async { print("4") }
+DispatchQueue(label: "first").async {
+    print("5 start")
+    sleep(5)
+    print("5 end")
+}
+DispatchQueue(label: "second").async { print("6") }
+==> 결과
+1
+2 start
+3
+5 start
+4
+6
+2 end
+5 end
+```
+마찬가지로 1 > 3 > 5와 2 > 4 > 6 의 순서로 시작됩니다. 하지만 2번과 5번은 최소 5초 이상 걸리는 작업으로 다른 작업들보다 늦게 끝났습니다.
+직렬 큐이기 때문에 들어오는 작업 순서대로 처리를 시작하지만, 앞 선 작업이 완료되지 않아도 다음 작업을 처리합니다.
+
+Concurrent * Async 방식에서는 어떨까요?
+``` swift
+let fisrtConcurrentQueue = DispatchQueue(label: "first",
+                                   qos: .default,
+                                   attributes: .concurrent,
+                                   autoreleaseFrequency: .inherit,
+                                   target: nil)
+let secondConcurrentQueue = DispatchQueue(label: "second",
+                                   qos: .default,
+                                   attributes: .concurrent,
+                                   autoreleaseFrequency: .inherit,
+                                   target: nil)
+fisrtConcurrentQueue.async { print("1") }
+secondConcurrentQueue.async { print("2") }
+fisrtConcurrentQueue.async { print("3") }
+secondConcurrentQueue.async { print("4") }
+fisrtConcurrentQueue.async { print("5") }
+secondConcurrentQueue.async { print("6") }
+==> 결과
+1
+4
+5
+6
+3
+2
+```
+병렬 큐에 비동기로 동작되기 때문에 작업 처리의 순서가 보장되지 않습니다.
 
 
 ## GCD vs Operation Queue
@@ -148,7 +220,6 @@ DispatchQueue.main.asyncAfter(deadline: .now() + .miliseconds(100)) {}
   > isCancelled, isAsynchronous, isExecuting, isFinished, isReady, dependencies, queuePriority, completionBlock
 
 * GCD는 앞선 기능을 하지 못합니다. Operation Queue를 좀 더 쉽게 쓸 수 있도록 개발한 것으로 좀 더 오버헤드가 있지만 사용하기에 매우 간편합니다.
-
 
 
 ### 참고
