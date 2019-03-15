@@ -42,7 +42,7 @@ gems: [jekyll-paginate]
 paginate: 6
 
 # comments
-disqus_shortname: cautionDev
+disqus_shortname: caution-dev
 
 # plugins:
 #   - jekyll-feed
