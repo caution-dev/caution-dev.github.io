@@ -80,7 +80,7 @@ iOS 에서 앱은 5 가지의 상태로 구분이 가능하며 항상 하나의 
 
 ## Backgound 상태에서 할 수 있는 작업
 
-![image-20190314162850542](/Users/juhee/Library/Application Support/typora-user-images/image-20190314162850542.png)
+![image-20190314162850542](/Users/juhee/Project/Blog/images/image-20190314162850542.png)
 
 | Xcode background Mode            | UIBackgroundModes 값 | 설명                                                         |
 | -------------------------------- | -------------------- | ------------------------------------------------------------ |

@@ -54,7 +54,9 @@ mathjax: true
 #### iOS 환경에서의 동시성 프로그래밍 지원 종류
 
 * GCD (Grand Central Dispatch) : 멀티 코어와 멀티 프로세싱 환경에서 최적화된 프로그래밍을 할 수 있도록 애플이 개발한 기술입니다.
-* Operation Queue : 비동기적으로 실행되어야 하는 작업을 객체 지향적인 방법으로 사용합니다..
+* Operation Queue : 비동기적으로 실행되어야 하는 작업을 객체 지향적인 방법으로 사용합니다.
+
+
 
 ## Operation Queue
 
@@ -71,6 +73,8 @@ mathjax: true
 * Operation의 실행을 관리하며, Operation을 담는 대기열(Queue)입니다.
 * 대기열에 담긴 Operation을 취소하려면 Operation Object의 ```cancel()```을 호출하거나 Operation Queue의 ```cancelAllOperations()```를 호출하여 대기열의 모든 연산을 취소하는 방법이 있습니다.
 * KVO를 사용해 작업 진행 상황을 감시할 수 있습니다.
+
+
 
 ## Grand Central Dispatch
 
