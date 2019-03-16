@@ -85,7 +85,7 @@ Child의 parent 프로퍼티를 weak 로 선언해주었습니다. 이렇게 wea
 #### 그렇다면 왜 모든 변수를 weak로 선언하지 않나요?
 class는 참조 타입입니다. 여러 변수가 하나의 인스턴스를 참조하고 있을 수 있습니다. 만약 모든 변수가 weak로 설정되어 있다면, 어느 한 변수에서 nil로 변환되거나 ARC에 의해서 메모리 해제가 발생했을 때, 의도치 않게 다른 참조 또한 nil로 변할 수 있습니다.
 
-모든 참조를 약한 참조로 변경했습니다. 
+모든 참조를 약한 참조로 변경했습니다.
 ```swift
 class Parent {
     let name: String
@@ -104,7 +104,7 @@ class Child {
 ```
 
 코드를 조금 변경해보죠. Child를 변수에 참조시키지 않고 바로 Parent의 프로퍼티에 담아보겠습니다.
-```Swift
+```swift
 let parent: Parent? = Parent(name: "가상부모")
 parent?.child = Child(name: "가상아이", parent: parent)
 print(parent?.child?.name)
