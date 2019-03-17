@@ -15,14 +15,6 @@ h6 {
     margin: 0;
     box-sizing: border-box;
 }
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-weight: 400;
-}
 html {
     height: 100%;
 }
@@ -45,6 +37,12 @@ hr {
     border: 0;
     border-top: 1px solid #eee;
     margin: 20px 0;
+}
+
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 ///////////
