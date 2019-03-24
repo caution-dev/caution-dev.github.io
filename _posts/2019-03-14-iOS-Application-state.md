@@ -97,7 +97,23 @@ iOS 에서 앱은 5 가지의 상태로 구분이 가능하며 항상 하나의 
 | Background fetch                 | fetch                | 앱은 정지적으로 네트워크에서 소량의 데이터를 다운로드하고 처리합니다. |
 | Remote notifications             | remote-notification  | 푸쉬 알림이 도착하면 앱에서 콘텐츠 다운로드를 시작하려고 합니다. 이 알림을 사용하여 푸쉬 알림과 관련된 콘텐츠 표시의 지연을 최소화하십니오. |
 
+### Background 에서 작업하고자 할 때 사용되는 함수
+#### [beginBackgroundTask(expirationHandler:)](https://developer.apple.com/documentation/uikit/uiapplication/1623031-beginbackgroundtask)
+##### 새로운 장기 실행 백그라운드 작업을 시작한다고 표시합니다.
+* handler : background 시간이 0에 도달했을 때 불리는 핸들러로 백그라운드 작업의 종료를 정리하고 표시합니다. 작업을 명시적으로 종료하지 않으면 앱이 강제종료됩니다. 시스템이 일시적으로 앱이 suspend 상태에 들어가지 않도록 차단합니다.
+* return : 새 백그라운드 작업의 고유 식별자입니다. 이 작업의 끝을 표시하려면이 값을 endBackgroundTask : 메서드에 전달해야합니다. 이 메소드는 백그라운드에서 실행이 불가능한 경우 UIBackgroundTaskInvalid를 리턴합니다.
+#### [beginBackgroundTask(withName:expirationHandler:)](https://developer.apple.com/documentation/uikit/uiapplication/1623051-beginbackgroundtask)
+##### 특정 이름을 부여한 새로운 장기 실행 백그라운드 작업을 시작한다고 표시합니다.
+* taskName : 백그라운드 작업을 볼 때 디버거에 표시 할 이름입니다. nil이 매개 변수 를 지정하면 이 메서드는 호출하는 함수 또는 메서드의 이름을 기반으로 이름을 생성합니다.
+* handler : 앱의 남은 배경 시간이 0에 도달하기 직전에 호출되는 핸들러. 이 핸들러를 사용하여 백그라운드 태스크의 끝을 정리하고 표시합니다. 작업을 명시 적으로 종료하지 않으면 앱이 종료됩니다. 시스템은 메인 스레드에서 동 기적으로 핸들러를 호출하여 일시적으로 앱의 일시 중단을 차단합니다.
+* return : 새 백그라운드 작업의 고유 식별자입니다. 이 작업의 끝을 표시하려면이 값을 endBackgroundTask : 메서드에 전달해야합니다. 이 메소드는 백그라운드에서 실행이 불가능한 경우 UIBackgroundTaskInvalid를 리턴합니다.
 
+이 메소드들은 앱의 백그라운드 실행 시간을 추가로 요청합니다. 미완성된 작업을 떠날 때 이 메소드를 호출하면 앱의 사용자 환경에 해로울 수 있습니다. 예를 들어, 작업이 진행되는 동안 시스템이 앱을 일시 중지하지 못하도록 데이터를 파일에 기록하기 전에 이 메서드를 호출하십시오. 백그라운드로 이동 한 후에 앱을 계속 실행하는 데 이 메소드를 사용하지 마십시오.
+
+작업을 시작하기 전에 가능한 한 빨리 이 메서드를 호출하십시오. 응용 프로그램이 실제로 백그라운드에 들어가기 전에 수행하는 것이 좋습니다. 메서드는 비동기적으로 앱에 대한 작업 assertion을 요청합니다. 앱이 일시 중지되기 직전에 이 메소드를 호출하면 작업 어설션이 승인되기 전에 시스템이 앱을 일시 중지 할 수 있습니다. 예를 들어, applicationDidEnterBackground : 메서드 끝에서 이 메서드를 호출하지 말고, 앱이 계속 실행될 것으로 기대하십시오. 시스템이 작업 assertion을 부여 할 수 없으면 만기 핸들러를 호출합니다.
+
+### [endBackgroundTask(_:)](https://developer.apple.com/documentation/uikit/uiapplication/1622970-endbackgroundtask)
+##### 특정 백그라운드 작업이 끝날 것임을 표시합니다.
 
 ## 참고
 
