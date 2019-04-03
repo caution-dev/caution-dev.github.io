@@ -2,7 +2,7 @@
 layout: post
 title:  "Hash Table"
 date:   2019-04-03 16:26:06 +0900
-categories: Study
+categories: 자료구조
 tags: Swift Hash
 author: Juhee Kim
 mathjax: true
@@ -201,4 +201,4 @@ func load(url: URL) -> Any {
 
 
 ### 참조
-* [Hello Coding 그림으로 개념을 이해하는 알고리즘](http://www.yes24.com/Product/goods/37885448) 
+* [Hello Coding 그림으로 개념을 이해하는 알고리즘](http://www.yes24.com/Product/goods/37885448)
