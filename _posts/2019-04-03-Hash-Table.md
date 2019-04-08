@@ -70,7 +70,7 @@ print(dictonary["milk"])  //1500
 ```swift
 var dns: [String:String] = [:]
 dns["google.com"] = "74.125.239.133"
-dns["facebook.com"] = "173.252.120.6"
+dns["naver.com"] = "173.252.120.6"
 ```
 
 또한 해시 테이블에서는 키-값이 1:1 매칭이기 때문에 **중복 항목을 방지**할 수 있습니다. 유권자의 투표 여부를 확인하려면 어떻게 해야할까요?
