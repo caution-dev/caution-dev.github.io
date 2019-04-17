@@ -3,7 +3,7 @@ layout: post
 title:  "Auto Layout Guide 따라잡기 1강 (1)"
 date:   2019-04-10 15:26:06 +0900
 categories: Tutorial
-tags: iOS autolayout 오토레이아웃 강의 튜토리얼 따라하4
+tags: iOS autolayout 오토레이아웃 강의 튜토리얼 따라하기
 author: Juhee Kim
 mathjax: true
 comments: true
@@ -14,10 +14,13 @@ comments: true
 
 안녕하세요! caution입니다. 본격적으로 Auto Layout 공부를 하려고 하는데 어떻게 시작할까 하다가 Apple의 가이드 문서인 [Auto Layout Guide](https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/AutolayoutPG/index.html#//apple_ref/doc/uid/TP40010853-CH7-SW1)를 번역해보려고 합니다!
 
-> 하기 컨텐츠는 Apple이 작성한 [Auto Layout Guide](https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/AutolayoutPG/index.html#//apple_ref/doc/uid/TP40010853-CH7-SW1)를 번역, 재사용한 컨텐츠임을 밝힙니다.
+#### Auto Layout Guide 번역 시리즈
+* Getting started
+  * [Understanding Auto Layout](https://caution-dev.github.io/tutorial/2019/04/10/Auto-Layout-Giuide-Getting-Started.html)
+  * [Auto Layout Without Constraints](https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/AutolayoutPG/AutoLayoutWithoutConstraints.html#//apple_ref/doc/uid/TP40010853-CH8-SW1)
 
-본격적으로 시작해볼까요!
-첫 번째 이야기는 [Understanding Auto Layout]()
+
+> 하기 컨텐츠는 Apple이 작성한 [Auto Layout Guide](https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/AutolayoutPG/index.html#//apple_ref/doc/uid/TP40010853-CH7-SW1)를 번역, 재사용한 컨텐츠임을 밝힙니다.
 
 ### Auto Layout 이해하기
 오토 레이아웃은 뷰 계층 안의 모든 뷰들의 사이즈와 위치를 해당 뷰에 적용된 제약 조건에 기반하여 동적으로 계산합니다. 예를 들어, 이미지 뷰와 가로로 중앙 정렬하고, 이미지의 하단 8 point 아래에 위쪽 가장자리가 존재하도록 버튼에 제약 조건을 줄 수 있습니다. 만약 이미지 뷰의 사이즈나 위치가 변경된다면, 버튼의 위치는 자동적으로 제약 조건에 일치하도록 조정됩니다.
