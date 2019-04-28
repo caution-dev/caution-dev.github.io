@@ -1,9 +1,9 @@
 ---
 layout: post
-title:  "[공식문서]AVAudioSession"
+title:  "[공식문서] AVAudioSession"
 date:   2019-04-28 14:26:06 +0900
-categories: Docs
-tags: iOS Apple-Docs Audio 번역 AVFoundation
+categories: Apple-Docs
+tags: iOS Audio 번역 AVFoundation
 author: Juhee Kim
 mathjax: true
 comments: true

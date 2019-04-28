@@ -2,7 +2,7 @@
 layout: post
 title:  "Auto Layout Guide 따라잡기 - Understanding Auto Layout"
 date:   2019-04-10 15:26:06 +0900
-categories: Tutorial
+categories: Apple-Docs
 tags: iOS autolayout 오토레이아웃 강의 튜토리얼 따라하기
 author: Juhee Kim
 mathjax: true
