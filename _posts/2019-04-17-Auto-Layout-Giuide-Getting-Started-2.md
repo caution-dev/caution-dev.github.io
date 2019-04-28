@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Auto Layout Guide 따라잡기 1강 (2)"
+title:  "Auto Layout Guide 따라잡기 - Auto Layout Without Constraints"
 date:   2019-04-17 15:26:06 +0900
 categories: Tutorial
 tags: iOS autolayout 오토레이아웃 강의 튜토리얼 따라하기
@@ -16,8 +16,9 @@ comments: true
 
 #### Auto Layout Guide 번역 시리즈
 * Getting started
-  * [Understanding Auto Layout](https://caution-dev.github.io/tutorial/2019/04/10/Auto-Layout-Giuide-Getting-Started.html)
-  * [Auto Layout Without Constraints](https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/AutolayoutPG/AutoLayoutWithoutConstraints.html#//apple_ref/doc/uid/TP40010853-CH8-SW1)
+  * [Understanding Auto Layout](https://caution-dev.github.io/tutorial/2019/04/10/Auto-Layout-Giuide-Getting-Started-1.html)
+  * [Auto Layout Without Constraints](https://caution-dev.github.io/tutorial/2019/04/10/Auto-Layout-Giuide-Getting-Started-2.html)
+  * [Anatomy of a Constraint](https://caution-dev.github.io/tutorial/2019/04/10/Auto-Layout-Giuide-Getting-Started-3.html)
 
 > 하기 컨텐츠는 Apple이 작성한 [Auto Layout Guide](https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/AutolayoutPG/AutoLayoutWithoutConstraints.html#//apple_ref/doc/uid/TP40010853-CH8-SW1)를 번역, 재사용한 컨텐츠임을 밝힙니다.
 
