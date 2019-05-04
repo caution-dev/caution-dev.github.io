@@ -3,7 +3,7 @@ layout: post
 title:  "[공식문서] WKScriptMessage"
 date:   2019-04-28 18:36:06 +0900
 categories: Apple-Docs
-tags: iOS 번역 WebKit Framework
+tags: iOS 번역 WebKit
 author: Juhee Kim
 mathjax: true
 comments: true
