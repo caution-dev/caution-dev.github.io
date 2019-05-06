@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "[공식문서] WKUserContentController"
-date:   2019-04-28 18:36:06 +0900
+date:   2019-05-04 18:36:06 +0900
 categories: Apple-Docs
 tags: iOS 번역 WebKit
 author: Juhee Kim
@@ -64,9 +64,12 @@ class WKContentRuleListStore
 NSObject의 서브 클래스이며 CVarArg, Equatable, Hashable, NSSecureCoding 프로토콜을 채택합니다.
 
 ### 함께 보기
-* [WKScriptMessage](https://developer.apple.com/documentation/webkit/wkscriptmessage) : WKScriptMessage 개체에는 웹 페이지에서 보낸 메시지에 대한 정보가 들어 있습니다.
-* [WKUserScript](https://developer.apple.com/documentation/webkit/wkuserscript) : WKUserScript 개체는 웹 페이지에 삽입 할 수있는 스크립트를 나타냅니다.
-* [WKScriptMessageHandler](https://developer.apple.com/documentation/webkit/wkscriptmessagehandler) : WKScriptMessageHandler 프로토콜을 준수하는 클래스는 웹 페이지에서 실행중인 JavaScript에서 메시지를 수신하는 메서드를 제공합니다.
+* [WKScriptMessage](https://caution-dev.github.io/apple-docs/2019/05/04/WKScriptMessage.html) : WKScriptMessage 객체에는 웹 페이지에서 보낸 메시지에 대한 정보가 들어 있습니다.
+* [WKScriptMessageHandler](https://caution-dev.github.io/apple-docs/2019/05/06/WKScriptMessageHandler.html) : WKScriptMessageHandler 프로토콜을 준수하는 클래스는 웹 페이지에서 실행중인 JavaScript에서 메시지를 수신하는 메서드를 제공합니다.
+
+* [WKScriptMessage](https://caution-dev.github.io/apple-docs/2019/05/04/WKScriptMessage.html) : WKScriptMessage 객체에는 웹 페이지에서 보낸 메시지에 대한 정보가 들어 있습니다.
+* [WKUserScript](https://caution-dev.github.io/apple-docs/2019/05/06/WKUserScript.html) : WKUserScript 객체는 웹 페이지에 삽입 할 수있는 스크립트를 나타냅니다.
+* [WKScriptMessageHandler](https://caution-dev.github.io/apple-docs/2019/05/06/WKScriptMessageHandler.html) : WKScriptMessageHandler 프로토콜을 준수하는 클래스는 웹 페이지에서 실행중인 JavaScript에서 메시지를 수신하는 메서드를 제공합니다.
 
 ### 원문
  * [WKUserContentController](https://developer.apple.com/documentation/webkit/wkusercontentcontroller)
