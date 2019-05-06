@@ -3,7 +3,7 @@ layout: post
 title:  "[공식문서] Creating a Basic Video Player (iOS and tvOS)"
 date:   2019-04-28 22:36:06 +0900
 categories: Apple-Docs
-tags: iOS Audio 번역 AVFoundation Articles
+tags: iOS Audio 번역 AVKit Articles
 author: Juhee Kim
 mathjax: true
 comments: true
@@ -49,7 +49,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
   2. Control을 누른 채로 Play Video button을 ```ViewController.swift``` 클래스에 드래그하여 새로운 ```@IBAction``` 메소드를 추가하고 이름을 ```playVideo```로 지정합니다.
   3. assistant editor를 닫고 Project Navigator에서 ```ViewController.swift``` 클래스를 선택합니다. 클래스 정의 위에, AVKit과 AVFoundation 프레임워크를 import 합니다.
   4. ```playVideo```메소드에서, 다음 구문을 추가합니다.
-  
+
 ```swift
 @IBAction func playVideo(_ sender: UIButton) {
     guard let url = URL(string: "https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_adv_example_hevc/master.m3u8") else {
