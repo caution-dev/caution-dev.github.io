@@ -38,7 +38,7 @@ tag_dir: tag/
 excerpt_separator: "\n\n\n\n"
 
 # paginate
-gems: [jekyll-paginate]
+plugins: [jekyll-paginate]
 paginate: 6
 
 # comments
@@ -46,7 +46,7 @@ disqus_shortname: caution-dev
 
 # plugins:
 #   - jekyll-feed
-gems:
+plugins:
    - jekyll-sitemap
 
 
