@@ -46,6 +46,9 @@ disqus_shortname: caution-dev
 
 # plugins:
 #   - jekyll-feed
+gems:
+   - jekyll-sitemap
+
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
