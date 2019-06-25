@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "[공식문서] Creating a Basic Video Player (iOS and tvOS)"
+title:  "[AVKit] Creating a Basic Video Player (iOS and tvOS)"
 date:   2019-04-28 22:36:06 +0900
 categories: Apple-Docs
 tags: iOS Audio 번역 AVKit Articles

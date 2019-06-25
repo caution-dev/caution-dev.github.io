@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "[공식문서] Playing Audio from a Video Asset in the Background"
+title:  "[AVKit] Playing Audio from a Video Asset in the Background"
 date:   2019-04-28 17:36:06 +0900
 categories: Apple-Docs
 tags: iOS Audio 번역 AVKit Articles

@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "[공식문서] WKUserScript"
+title:  "[WebKit] WKUserScript"
 date:   2019-05-06 16:36:06 +0900
 categories: Apple-Docs
 tags: iOS 번역 WebKit

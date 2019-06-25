@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "[공식문서] WKScriptMessageHandler"
+title:  "[WebKit] WKScriptMessageHandler"
 date:   2019-05-06 16:36:06 +0900
 categories: Apple-Docs
 tags: iOS 번역 WebKit

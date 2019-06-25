@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "[공식문서] AVAudioSession"
+title:  "[AVKit] AVAudioSession"
 date:   2019-04-28 14:26:06 +0900
 categories: Apple-Docs
 tags: iOS Audio 번역 AVKit
