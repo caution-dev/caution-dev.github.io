@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "HIG 톺아보기 #App Architecture #Loading #Modality"
-date:   2019-02-10 17:38:19 +0900
+date:   2019-06-25 15:38:19 +0900
 categories: iOS
 tags: iOS HIG Apple 번역
 author: Juhee Kim
