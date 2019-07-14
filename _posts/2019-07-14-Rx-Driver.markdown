@@ -1,0 +1,152 @@
+---
+layout: post
+title:  "RxCocoa - Traits"
+date:   2019-07-14 09:50:19 +0900
+categories: RxSwift
+tags: Rx RxSwift RxCocoa 번역 Driver
+author: Juhee Kim
+mathjax: true
+---
+
+* content
+{:toc}
+
+## Driver
+이것은 가장 정교한 Trait입니다. 그 의도는 UI 레이어에 반응 코드를 작성하는 직관적인 방법을 제공하거나 응용 프로그램을 구동하는 데이터 스트림을 모델링하려는 모든 경우를 위한 것입니다.
+ * 오류가 발생하지 않습니다.
+ * 관찰은 메인 스케줄러에서 발생합니다.
+ * 부작용을 공유합니다 (`share (replay : 1, scope : .whileConnected)`).
+
+### 이름이 왜 Driver인가?
+앱을 구동하는 시퀀스를 모델링하는 데에 그 의도가 있기 때문입니다.
+
+예 :
+ * CoreData 모델에서 UI를 구동할 때
+ * 다른 UI 요소의 값을 사용하여 UI를 구동해야할 때.
+
+정상적인 운영 체제 드라이버와 마찬가지로, 시퀀스 오류가 발생하면 응용 프로그램이 사용자 입력에 응답하지 않습니다.
+
+UI 요소와 응용 프로그램 논리가 일반적으로 스레드로부터 안전하지 않기 때문에 이러한 요소들은 `main thread`에서 관찰되는 것이 매우 중요합니다.
+
+또한 `Driver`는 side effect를 공유하는 observable sequence를 만듭니다.
+
+### 부분 사용 예제
+일반적인 beginner 예제입니다!
+```swift
+let results = query.rx.text
+    .throttle(.milliseconds(300), scheduler: MainScheduler.instance)
+    .flatMapLatest { query in
+        fetchAutoCompleteItems(query)
+    }
+
+results
+    .map { "\($0.count)" }
+    .bind(to: resultCount.rx.text)
+    .disposed(by: disposeBag)
+
+results
+    .bind(to: resultsTableView.rx.items(cellIdentifier: "Cell")) { (_, result, cell) in
+        cell.textLabel?.text = "\(result)"
+    }
+    .disposed(by: disposeBag)
+```
+위 코드의 의도된 바는 다음과 같습니다.:
+* 사용자의 입력을 줄입니다.
+* 서버에 접속하여 사용자 결과 목록을 가져옵니다.
+* 결과를 두 개의 UI요소 (result table, result count label) 에 바인딩합니다.
+
+그렇다면 이 코드의 문제점은 무엇일까요?
+
+* `fetchAutoCompleteItems` Observable Sequence 오류가 발생하면 이 오류로 인해 모든 항목의 바인딩이 해제되고 UI가 더 이상 새로운 처리에 응답하지 않습니다.
+* `fetchAutoCompleteItems`가 일부 백그라운드 스레드에서 결과를 반환할 경우 background thread에서 UI 요소에 바인딩을 시도하기 때문에 크래시가 발생할 수 있습니다.
+* 결과는 두 개의 UI요소에 바인딩됩니다. 즉, 각 사용자 쿼리에 따른 두 개의 HTTP 요청이 만들어지면서, 결국 다른 결과가 UI에 결과로 들어가기 때문에 의도된 동작이 아닙니다.
+
+위의 코드보다 적절한 버전은 다음과 같습니다.
+
+```swift
+let results = query.rx.text
+    .throttle(.milliseconds(300), scheduler: MainScheduler.instance)
+    .flatMapLatest { query in
+        fetchAutoCompleteItems(query)
+            .observeOn(MainScheduler.instance)  // 결과는 MainScheduler에 의해 반환됩니다.
+            .catchErrorJustReturn([])           // 에러가 발생될 경우 그냥 빈 결과를 반환합니다.
+    }
+    .share(replay: 1)                           // HTTP requests는 모든 UI element에 반복된 결과가 공유됩니다.
+
+results
+    .map { "\($0.count)" }
+    .bind(to: resultCount.rx.text)
+    .disposed(by: disposeBag)
+
+results
+    .bind(to: resultsTableView.rx.items(cellIdentifier: "Cell")) { (_, result, cell) in
+        cell.textLabel?.text = "\(result)"
+    }
+    .disposed(by: disposeBag)
+```
+
+이러한 모든 요구 사항이 대형 시스템에서 제대로 처리되는지 확인하는 것은 어려울 수 있지만, 컴파일러와 Trait을 사용하여 이러한 요구사항이 충족되었음을 입증하는 간단한 방법이 있습니다.
+
+다음 코드는 위의 코드와 거의 유사해보입니다:
+
+```swift
+let results = query.rx.text.asDriver()        // 일반적인 sequence를 `Driver` sequence로 변환합니다.
+    .throttle(.milliseconds(300), scheduler: MainScheduler.instance)
+    .flatMapLatest { query in
+        fetchAutoCompleteItems(query)
+            .asDriver(onErrorJustReturn: [])  // Builder는 오류시에 어떤 걸 반환해야 하는지 만 알면 됩니다.
+    }
+
+results
+    .map { "\($0.count)" }
+    .drive(resultCount.rx.text)               // 만약 `bind(to:)` 메서드 대신 `drive` 메소드를 사용할 수 있다면, 그것은 모든 프로퍼티가 만족했다는 것을 의미합니다.
+    .disposed(by: disposeBag)              // that means that the compiler has proven that all properties
+                                              // are satisfied.
+results
+    .drive(resultsTableView.rx.items(cellIdentifier: "Cell")) { (_, result, cell) in
+        cell.textLabel?.text = "\(result)"
+    }
+    .disposed(by: disposeBag)
+```
+
+자 무슨 일이 일어난 걸까요?
+
+이 첫 번째 `asDriver` 메서드는 `ControlProperty` 특성을 `Driver`로 변경합니다.
+```swift
+query.rx.text.asDriver()
+```
+그 외에 할 필요가 있는 특별한 것이 없단 걸 기억하세요. `Driver`에는 `ControlProperty` 특성의 모든 특성을 포함하며 더 많은 특성을 가지고 있습니다. 근본적으로는 Observable sequence인데, 이것이 `Driver` 로 감싸져있을 뿐입니다.
+
+두 번째 변화는 다음과 같습니다:
+```swift
+.asDriver(onErrorJustReturn: [])
+```
+어느 observable sequence든 다음 3가지 항목을 만족하면 `Driver`로 변환할 수 있습니다.
+* error가 발생하지 않습니다.
+* main scheduler에서 관찰됩니다.
+* side effect를 공유합니다.
+
+그래서 이 프로퍼티들이 만족했는지 어떻게 알 수 있을까요? 일반적인 rx 연산자를 사용해봅시다. `asDriver(onErrorJustReturn:[])`는 다음 코드와 같습니다.
+```swift
+let safeSequence = xs
+  .observeOn(MainScheduler.instance)        // 이벤트들을 main scheduler에서 관찰합니다.
+  .catchErrorJustReturn(onErrorJustReturn)  // 에러가 발생하지 않습니다.
+  .share(replay: 1, scope: .whileConnected) // side effect를 공유합니다.
+
+return Driver(raw: safeSequence)            // Driver로 감쌉니다.
+```
+
+마지막은 `bind(to:)`대신 `drive`를 사용하는 것입니다.
+
+`drive`는 `Driver` trait에만 정의되어 있습니다. 이는 만약 `drive`를 어디선가 봤다면, 그 observable sequence는 영원히 오류를 발생시키지 않고, 메인 스레드에서 관찰되며, UI 요소에 binding 하는 것이 안전합니다.
+
+하지만, 이론적으로 다른 사람이 다른 interface에서 `drive` 메소드를 ObservableType에서 동작하도록 정의했을 수도 있습니다. 그래서 더 안전하게 쓰려면, UI 요소들에 바인딩 하기 전에 `let results: Driver<[Results]> = ...` 이런식으로 미리 임시 정의를 만들어 놓아야 완전합니다. 하지만, 이러한 시나리오가 현실적인지 아닌지에 대해서는 독자들에게 남겨두겠습니다.
+
+## Signal
+`Signal`은 `Driver`와 비슷하지만 한 가지 다른 점이 있는데요, 구독에서 마지막 이벤트를 재사용하지 않지만, 구독자들은 여전히 sequence의 계산된 리소스를 공유합니다.
+
+`Signal` 이란:
+* 에러가 나지 않습니다.
+* Main Scheduler에서 이벤트가 발생합니다.
+* 계산된 리소스를 공유합니다. `share(scope:: .whileConnected`
+* 구독에서 항목을 replay 하지 않습니다.

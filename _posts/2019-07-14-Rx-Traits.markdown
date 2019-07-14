@@ -1,0 +1,263 @@
+---
+layout: post
+title:  "Traits"
+date:   2019-07-14 09:46:19 +0900
+categories: RxSwift
+tags: Rx RxSwift 번역 Traits
+author: Juhee Kim
+mathjax: true
+---
+
+* content
+{:toc}
+
+## General
+### Why
+Swift는 응용 프로그램의 정확성과 안정성을 향상시키고 Rx를보다 직관적이고 직접적인 경험으로 사용하는 데 사용할 수있는 강력한 유형 시스템을 갖추고 있습니다.
+
+특성은 모든 경계에서 사용할 수있는 원시 Observable과 비교할 때 인터페이스 경계에서 관찰 가능한 시퀀스 속성을 전달하고 보장하며 문맥상의 의미, 구문 설탕을 제공하고보다 구체적인 사용 사례를 타겟팅하는 데 도움이됩니다. 이러한 이유로 특성은 전적으로 선택 사항입니다. 모든 핵심 RxSwift / RxCocoa API가 원시 Observable 시퀀스를 프로그램에서 사용할 수 있습니다.
+
+참고 :이 문서에서 설명하는 일부 특성 (예 : 드라이버)은 RxCocoa 프로젝트에만 국한되며, 일부는 일반 RxSwift 프로젝트의 일부입니다. 그러나 필요한 경우 다른 Rx 구현에서도 동일한 원칙을 쉽게 구현할 수 있습니다.
+
+### How they work
+Traits는 단일 읽기 전용 Observable sequence 속성을 가진 래퍼 구조체입니다.
+```swift
+struct Single<Element> {
+    let source: Observable<Element>
+}
+
+struct Driver<Element> {
+    let source: Observable<Element>
+}
+...
+```
+Observable sequence에 대한 빌더 패턴 구현의 일종이라고 생각할 수도 있습니다. Trait이 만들어지면, `.asObservable()`이 이를 vanila??? observable sequence로 변환합니다.
+
+## RxSwift traits
+### Single
+Single은 여러개의 항목 시리지를 배출하는 대신 항상 단일 항목 혹은 오류를 배출한다고 보장되는 Observable입니다.
+* 하나의 항목 혹은 오류를 배출
+* side effect를 공유하지 않음
+Single을 사용하는 일반적인 사용 사례로는 응답/오류만을 반환할 수 있는 HTTP 요청을 수행하는 것입니다. 하지만 Single을 사용하여 스트림 요소가 아닌 단일 항목만을 관리해야할 경우 모델링에 사용할 수 있습니다.
+
+#### Single 생성하기
+Single은 Observable을 생성하는 것과 매우 유사합니다. `Single<T>.create()`
+```swift
+func getRepo(_ repo: String) -> Single<[String: Any]> {
+    return Single<[String: Any]>.create { single in
+        let task = URLSession.shared.dataTask(with: URL(string: "https://api.github.com/repos/\(repo)")!) { data, _, error in
+            if let error = error {
+                single(.error(error))
+                return
+            }
+
+            guard let data = data,
+                  let json = try? JSONSerialization.jsonObject(with: data, options: .mutableLeaves),
+                  let result = json as? [String: Any] else {
+                single(.error(DataError.cantParseJSON))
+                return
+            }
+
+            single(.success(result))
+        }
+
+        task.resume()
+
+        return Disposables.create { task.cancel() }
+    }
+}
+```
+이렇게 만들어진 건 다음과 같이 구독하여 쓸 수 있습니다.
+```swift
+getRepo("ReactiveX/RxSwift")
+    .subscribe { event in
+        switch event {
+            case .success(let json):
+                print("JSON: ", json)
+            case .error(let error):
+                print("Error: ", error)
+        }
+    }
+    .disposed(by: disposeBag)
+```
+혹은 `subscrie(onSuccess:onErrore:)`를 사용할 수 있습니다.
+```swift
+getRepo("ReactiveX/RxSwift")
+    .subscribe(onSuccess: { json in
+                   print("JSON: ", json)
+               },
+               onError: { error in
+                   print("Error: ", error)
+               })
+    .disposed(by: disposeBag)
+```
+구독을 하게 되면 Single 항목을 포함한 .sucess 혹은 .error 인 열거형 타입 `SingleEvent`를 제공해줍니다. 첫 번째 이벤트가 배출되면 더 이상 이벤트가 발생되지 않습니다.
+
+또한 기본 Observable sequence에서 `.asSingle()`을 통해 Single로 변환시킬 수 있습니다.
+
+### Completable
+Completable은 complete 나 error 만을 배출할 수 있는 다양한 Observable 들을 말합니다. 어떠한 항목도 배출되지 않는 다는 것을 보장합니다.
+* 0개의 항목을 배출합니다.
+* completion 나 error 이벤트를 배출합니다.
+* side effect를 공유하지 않습니다.
+Completable을 사용하기 좋은 곳은 연산의 결과와는 관계 없이, 연산이 끝났는지 여부에 대해 알아야 할 때 모델링에 사용할 수 있습니다.  항목을 배출할 수 없는 `Observable<Void>`와 비교해볼 수 있습니다.
+#### Completable 생성하기
+Completable을 Observable 처럼 생성할 수 있습니다.
+```swift
+func cacheLocally() -> Completable {
+    return Completable.create { completable in
+       // Store some data locally
+       ...
+
+       guard success else {
+           completable(.error(CacheError.failedCaching))
+           return Disposables.create {}
+       }
+
+       completable(.completed)
+       return Disposables.create {}
+    }
+}
+```
+그리고 다음과 같은 방식으로 사용할 수 있습니다.
+```swift
+cacheLocally()
+    .subscribe { completable in
+        switch completable {
+            case .completed:
+                print("Completed with no error")
+            case .error(let error):
+                print("Completed with an error: \(error.localizedDescription)")
+        }
+    }
+    .disposed(by: disposeBag)
+```
+혹은 `subscribe(onCompleted:onError:)`을 사용할 수 있습니다.
+```swift
+cacheLocally()
+    .subscribe(onCompleted: {
+                   print("Completed with no error")
+               },
+               onError: { error in
+                   print("Completed with an error: \(error.localizedDescription)")
+               })
+    .disposed(by: disposeBag)
+```
+구독하게 되면 열거형 타입인 `CompletableEvent`을 제공합니다. 이 열거형은 .compeleted 혹은 .error 입니다. 첫 번째 이벤트를 배출하고 나서 더 이상 이벤트가 발생하지 않습니다.
+
+### Maybe
+Maybe는 Single과 Completable 사이에 있는 Observable의 변형입니다. 단일 항목를 내보낼 수도 있고, 항목을 내보내지 않고 완료되거나 오류가 발생할 수도 있습니다. 세 가지 이벤트가 하나라도 발생한다면 그 이후에 어떠한 이벤트도 발생되지 않습니다.
+* 완료된 이벤트, 단일 항목, 혹은 오류를 배출
+* side effect를 공유하지 않음.
+Maybe는 동작이 항목을 배출할 수 있지만, 반드시 배출해야하는 것은 아닐 때에 사용할 수 있습니다.
+#### Maybe 생성하기
+```swift
+func generateString() -> Maybe<String> {
+    return Maybe<String>.create { maybe in
+        maybe(.success("RxSwift"))
+
+        // OR
+
+        maybe(.completed)
+
+        // OR
+
+        maybe(.error(error))
+
+        return Disposables.create {}
+    }
+}
+```
+사용하기
+```swift
+generateString()
+    .subscribe { maybe in
+        switch maybe {
+            case .success(let element):
+                print("Completed with element \(element)")
+            case .completed:
+                print("Completed with no element")
+            case .error(let error):
+                print("Completed with an error \(error.localizedDescription)")
+        }
+    }
+    .disposed(by: disposeBag)
+```
+`subscribe(onSuccess:onError:onCompleted:)` 사용하기
+```swift
+generateString()
+    .subscribe(onSuccess: { element in
+                   print("Completed with element \(element)")
+               },
+               onError: { error in
+                   print("Completed with an error \(error.localizedDescription)")
+               },
+               onCompleted: {
+                   print("Completed with no element")
+               })
+    .disposed(by: disposeBag)
+```
+일반 Observable sequence에서 `.asMaybe()`를 사용하여 `Maybe`로 전환할 수 있습니다.
+
+
+## Single? SingleTrait? PrimitiveSequenceType?
+이래저래 파고들다 보니 `SingleTrait`이란 걸 발견했습니다.
+`Single`의 정의를 타고 들어가 보면 `Single.swift` 파일에서 다음과 같은 걸 볼 수 있습니다.
+```swift
+/// Sequence containing exactly 1 element
+public enum SingleTrait { }
+/// Represents a push style sequence containing 1 element.
+public typealias Single<Element> = PrimitiveSequence<SingleTrait, Element>
+
+public enum SingleEvent<Element> {
+    /// One and only sequence element is produced. (underlying observable sequence emits: `.next(Element)`, `.completed`)
+    case success(Element)
+
+    /// Sequence terminated with an error. (underlying observable sequence emits: `.error(Error)`)
+    case error(Swift.Error)
+}
+
+extension PrimitiveSequenceType where Trait == SingleTrait {
+    public typealias SingleObserver = (SingleEvent<Element>) -> Void
+
+    /**
+     Creates an observable sequence from a specified subscribe method implementation.
+
+     - seealso: [create operator on reactivex.io](http://reactivex.io/documentation/operators/create.html)
+
+     - parameter subscribe: Implementation of the resulting observable sequence's `subscribe` method.
+     - returns: The observable sequence with the specified implementation for the `subscribe` method.
+     */
+    public static func create(subscribe: @escaping (@escaping SingleObserver) -> Disposable) -> Single<Element> {
+        let source = Observable<Element>.create { observer in
+ ...
+        }
+}
+```
+`Single`은 `PrimitiveSequence<SingleTrait, Element>`의 `typealias`였군요! SingleTrait은 enum 입니다.
+
+**`PrimitiveSequence`** : Observable sequences containing 0 or 1 element.
+
+0개 혹은 1개의 항목을 포함하는 Observable Sequence를 의미합니다. 앞서 나왔던 `Single`, `Completable`, `Maybe`를 포괄하는 의미가 되겠네요. 마찬가지로 다른 Trait들의 정의를 살펴보다도 유사한 구조를 가지는 것을 알 수 있습니다.
+#### Completable
+```swift
+/// Sequence containing 0 elements
+public enum CompletableTrait { }
+/// Represents a push style sequence containing 0 elements.
+public typealias Completable = PrimitiveSequence<CompletableTrait, Swift.Never>
+```
+#### May
+```swift
+/// Sequence containing 0 or 1 elements
+public enum MaybeTrait { }
+/// Represents a push style sequence containing 0 or 1 element.
+public typealias Maybe<Element> = PrimitiveSequence<MaybeTrait, Element>
+```
+
+왜 이런 구조를 가져가야했을까요?
+잘 모르겠으니까 기억해둡시다!!! 추후에 더 찾아보는 걸로
+[Completable+AndThen](https://github.com/ReactiveX/RxSwift/blob/master/RxSwift/Traits/Completable%2BAndThen.swift)
+
+
+## 기억해두기
+[RxCocoa traits](https://github.com/ReactiveX/RxSwift/blob/master/Documentation/Traits.md) 여기 안봤음

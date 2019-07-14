@@ -1,0 +1,107 @@
+---
+layout: post
+title:  "Relay"
+date:   2019-07-14 09:48:19 +0900
+categories: RxSwift
+tags: Rx RxSwift 번역 Relay
+author: Juhee Kim
+mathjax: true
+---
+
+* content
+{:toc}
+
+## Relay
+RxRelay는 PublishRelay와 BehaviorRelay의 두 종류의 릴레이를 제공합니다. 기존 PublishSubject와 BehaviorSubject와는 두 가지 차이점을 가집니다. :
+* Relay는 .complete 이벤트가 발생하지 않습니다.
+* Relay는 .error 이벤트가 발생하지 않습니다.
+즉 릴레이는 .next 이벤트 만 방출하고 절대로 .error / .complete 이벤트가 나오지 않습니다. 마지막에 .dispose만 발생합니다.
+
+* `.onNext()`, `.onError()`, `.onComplete()`가 없습니다. 항목을 내보내기 위해서는 `.onNext()` 대신 `.accept()`를 사용합니다.
+
+Subject의 경우 오류가 발생할 경우 sequence가 종료되지만, Relay는 dispose가 불리기 전까지 종료되지 않기 때문에 UI 이벤트를 받을 때 사용해볼 수 있을 것 같습니다.
+
+### PublishRelay
+```swift
+    func testForPublishRelay() {
+        let disposeBag = DisposeBag()
+
+        let publishRelay = PublishRelay<String>()
+        publishRelay.accept("Is Anyone Else?")
+        publishRelay.subscribe(onNext: { str in
+            print("observer 1 : \(str)")
+        }, onCompleted: {
+            print("observer 1 complete ")
+        }, onDisposed: {
+            print("observer 1 disposed ")
+        }).disposed(by: disposeBag)
+
+        publishRelay.accept("Hi")
+        publishRelay.accept("Observers")
+
+        publishRelay.subscribe(onNext: { str in
+            print("observer 2 : \(str)")
+        }, onCompleted: {
+            print("observer 2 complete ")
+        }, onDisposed: {
+            print("observer 2 disposed ")
+        }).disposed(by: disposeBag)
+        publishRelay.accept("nice to")
+        publishRelay.accept("meet you guys.")
+    }
+```
+#### 결과
+```
+observer 1 : Hi
+observer 1 : Observers
+observer 1 : nice to
+observer 2 : nice to
+observer 1 : meet you guys.
+observer 2 : meet you guys.
+observer 1 disposed
+observer 2 disposed
+```
+### BehaviorRelay
+* `value` property로 현재 값을 가져올 수 있습니다.
+#### 예제
+```swift
+    func testForBehaviorRelay() {
+        let disposeBag = DisposeBag()
+
+        let behaviorRelay = BehaviorRelay<String>(value: "Is Anyone Else?")
+        behaviorRelay.subscribe(onNext: { str in
+            print("observer 1 : \(str)")
+        }, onCompleted: {
+            print("observer 1 complete ")
+        }, onDisposed: {
+            print("observer 1 disposed ")
+        }).disposed(by: disposeBag)
+
+        behaviorRelay.accept("Hi")
+        behaviorRelay.accept("Observers")
+
+        behaviorRelay.subscribe(onNext: { str in
+            print("observer 2 : \(str)")
+        }, onCompleted: {
+            print("observer 2 complete ")
+        }, onDisposed: {
+            print("observer 2 disposed ")
+        }).disposed(by: disposeBag)
+
+        behaviorRelay.accept("nice to")
+        behaviorRelay.accept("meet you guys.")
+    }
+```
+#### 결과
+```
+observer 1 : Is Anyone Else?
+observer 1 : Hi
+observer 1 : Observers
+observer 2 : Observers
+observer 1 : nice to
+observer 2 : nice to
+observer 1 : meet you guys.
+observer 2 : meet you guys.
+observer 1 disposed
+observer 2 disposed
+```
