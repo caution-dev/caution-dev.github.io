@@ -2,7 +2,7 @@
 layout: post
 title:  "What is Core Data"
 date:   2019-07-14 15:18:19 +0900
-categories: iOS
+categories: Core Data
 tags: Coredata Apple-framework iOS
 author: Juhee Kim
 mathjax: true
@@ -38,4 +38,7 @@ Core Data는 영구저장을 위해 SQLite 를 사용합니다.
 
 ### Data Model 만들기
 
-핵심 데이터의 기능 대부분은 응용 프로그램의 엔터티, 속성 및 속성 간의 관계를 설명하기 위해 만드는 스키마에 따라 달라집니다. 핵심 데이터는 NSManagedObjectModel의 인스턴스 인 관리 객체 모델이라는 스키마를 사용합니다. 일반적으로 모델이 풍부할수록 더 우수한 Core Data가 응용 프로그램을 지원할 수 있습니다. 
+Core Data의 기능 대부분은 응용 프로그램의 엔터티, 속성 및 속성 간의 관계를 설명하기 위해 만드는 스키마에 따라 달라집니다. 핵심 데이터는 NSManagedObjectModel의 인스턴스인 관리 객체 모델이라 불리는 스키마를 사용합니다. 일반적으로 모델이 풍부할수록 더 우수한 Core Data가 응용 프로그램을 지원할 수 있습니다.
+
+### Entity와 그 Property 만들기
+Xcode에서 새 프로젝트를 시작하고 템플릿 선택 대화 상자를 열 때 코어 데이터 사용 확인란을 선택합니다. 코어 데이터 모델의 소스 파일이 템플리트의 일부로 작성됩니다. 해당 소스 파일의 확장자는 .xcdatamodeld입니다. 탐색기 영역에서 해당 파일을 선택하여 핵심 데이터 모델 편집기를 표시하십시오.
