@@ -103,3 +103,18 @@ func object(with: NSManagedObjectID) -> NSManagedObject
 `NSManagedObject`는 Core Data를 사용하면서 가장 자주 사용하게 될 class입니다. 이 클래스는 로드한 Entity의 데이터(Record)들을 관리하고 있으며, Entity에 데이터를 추가하거나, 삭제할 때에도 이 class 인스턴스를 통해야 합니다. 또한 변경된 데이터를 **저장**할 때에도 이 인스턴스를 사용합니다.
 
 > 주의하세요! Core Data는 in-memory-DB의 역할을 수행합니다. 모든 로드된 데이터는 `NSManagedObject`가 살아있는 한 memory 위에 올라가 있습니다. 또한, 새로운 데이터가 추가되었든, 수정사항이 발생했든 모든 데이터는 `NSManagedObject`가 가지고 있으며, **명시적으로 `context.save()`를 호출해야 수정사항이 저장됩니다.**
+
+### NSPersistentStoreCoordinator
+model을 사용해서 `context` 과 `persistentStore`간의 커뮤니케이션을 도와주는 코디네이터입니다.
+
+### NSPersistentContainer
+`NSPersistentContainer` 는 Core Data에서 정보를 저장하고, 검색하는 것을 용이케 하는 개체들의 집합입니다. 이 개체들의 집합을 **Core Data Stack**이라고 부릅니다. 즉 `NSPersistentContainer`는 애플리케이션의 **Core Data Stack**을 캡슐화 한 것입니다. **Core Data Stack**에는 관리받는 모델(NSManagedObjectModel), 영속성 코디네이터(NSPersistentStoreCoordinator), 관리 객체 컨텍스트(NSManagedObjectContext)를 포함합니다.
+
+즉 Core Data Stack이란, CoreData를 이용해서 Model layer를 관리하는 객체들을 아우러 말합니다.
+
+![image](../images/coredata/core_Data_stack.png)
+
+
+와 이론은 여기까지 입니다 :)
+
+다음 스텝에서는 이제 코드를 기반으로 간단한 **메모 앱**을 만들어보겠습니다 :)
