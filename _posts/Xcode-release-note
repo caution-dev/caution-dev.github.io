@@ -42,7 +42,6 @@ iOS 13, macOS Catalina 10.15, watchOS 6, 그리고 tvOS 13 SDK를 포함한 Xcod
 ### 해결된 이슈
 * 시스템 테마는 dark이고 Xcode는 light 일 때 이슈 텍스트가 light color로 보이는 문제 해결(48230278)
 
-### **Apple Clang Compiler**
 
 
 ### 함께보기
