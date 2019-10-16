@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  ""
+title:  "Django Study Day 1"
 date:   2019-10-16 00:26:06 +0900
 categories: Django
 tags: Backend Django Python
