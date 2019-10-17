@@ -347,6 +347,7 @@ Django 프로젝트에서는 `.sqlite3`를 사용해서 Database를 관리하고
 그럼 이제 데이터를 넣을 수 있는 **관리자 페이지**를 만들어봅시다.
 
 ### 새로운 페이지 추가하기
+관리자 페이지를 만들어보기 전에, 우리가 생성한 새로운 페이지를 프로젝트에 추가해봅시다.
 
 #### URL 추가하기
 새로운 페이지를 보여주려면, 그 페이지에 접속할 URL을 만들어야하겠죠? URL의 관리는 `mysite/urls.py`에서 관리할 수 있습니다.
@@ -398,7 +399,7 @@ def post_list(request):
 
 먼저 간단한 html 파일을 만들어봅시다. 저는 프로젝트 최상단에서 `/templates/post_list.html` 파일을 생성하고 다음과 같이 써넣었습니다.
 
-```HTML
+```html
 <!Doctype html>
 <html lang="ko">
 <head>
