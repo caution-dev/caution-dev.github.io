@@ -137,6 +137,7 @@ ls -al
 
 #### manage.py
 `manage.py`는 스크립트 파일로, 사이트 관리를 도와주는 역할을 합니다. 이 스크립트로 다른 설치 작업 없이, 컴퓨터에서 웹 서버를 시작할 수 있습니다.
+Django 프로젝트를 진행하면서 필요한 기능 (Application 추가, Database migration, admin 사용자 추가 등등)들에 대한 스크립트를 포함하고 있습니다.
 
 #### settings.py
 `mysite` 패키지 하위에는 `settings.py`라는 파일이 있는데요, 이 파일은 웹사이트와 관련된 설정을 작성하는 파일입니다.
@@ -182,7 +183,7 @@ python manage.py runserver
 하나의 웹 프로젝트는 다양한 단위로 세분화할 수 있습니다. 예를 들어 네이버 사이트를 만든다고 생각했을 때 네이버 검색, 블로그, 카페, 쇼핑 등등 하나로 개발하기에는 너무나도 큰 규모의 프로젝트를 진행해야 한다면 각 기능별로 나누어 볼 수 있겠죠. 그리고 그 각각의 기능들이 Django 에서는 **Application**이 됩니다.
 
 ### Application 추가하기
-한 프로젝트에 다수의 Application들이 추가되면 누가 관리할까요? 앞서 소개되었던 `manage.py`가 그 역할을 합니다. blog Application을 추가하려면 `manage.py`에 포함된 `startapp` 이라는 명령어를 사용해볼 수 있습니다.
+한 프로젝트에 다수의 Application들이 추가하려면 어떻게 해야할까요? 앞서 소개되었던 `manage.py`가 이미 Application을 생성하는 명령어를 가지고 있습니다. blog Application을 추가하기 위해 `manage.py`에 포함된 `startapp` 이라는 명령어를 사용해봅시다.
 
 ```sh
 python manage.py startapp blog
@@ -220,7 +221,7 @@ class Post(models.Model):
 
 그럼 `import this name`을 눌러줍시다. (혹은 Alt + Enter) 요렇게 두 번만 하면?
 
-```Python
+```python
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
@@ -415,7 +416,7 @@ def post_list(request):
 
 이제 `post_list`를 요청했을 때 이 html 파일이 불러와지도록 만들어봅시다. 그럼 앞서 작성했던 `post_list(request)` 메서드를 조금 수정합니다. :)
 
-```Python
+```python
 def post_list(request):
     return render(request, 'post_list.html')
 ```
@@ -464,7 +465,7 @@ TEMPLATES = [
 #### admins.py
 관리자 페이지는 `admins.py`에서 관리합니다. 여기에 관리할 model을 적어주기만 하면 됩니다.
 
-```Python
+```python
 from django.contrib import admin
 from .models import Post
 
