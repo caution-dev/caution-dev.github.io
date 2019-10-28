@@ -33,7 +33,7 @@ comments: true
 #### 새로운 가상환경 생성
 `python` 버전은 3.6.8을 사용하고, 이름은 djangogirls-env 인 가상환경을 만들어봅시다.
 ```sh
-pyenv virtualenv 3.6.8 djangogirls-env
+$ pyenv virtualenv 3.6.8 djangogirls-env
 ```
 
 #### 원하는 위치에서 가상환경 구동시키기
@@ -42,17 +42,17 @@ pyenv virtualenv 3.6.8 djangogirls-env
 이번 Django 스터디에서는 가장 최상위 루트를 **projects**로 명명하기로 했어요. 그리고 가장 첫 번째 프로젝트의 이름은 **djangogirls**입니다. 여기에 맞게 폴더구조를 먼저 구성합시다.
 
 ```sh
-cd ~/
-mkdir projects
-cd projects
-mkdir djangogirls
-cd djangogirls
+$ cd ~/
+$ mkdir projects
+$ cd projects
+$ mkdir djangogirls
+$ cd djangogirls
 ```
 
 이제 `djangogirls`에서, 앞서 만들었던 `djangogirls-env` 가상환경을 구동시킵시다.
 
 ```sh
-pyenv local djangogirls-env
+$ pyenv local djangogirls-env
 ```
 
 오, 위의 명령어를 치고 나면 사용하고 있는 `console`이 이전과 조금 달라진 것을 알아채셨나요?
@@ -72,7 +72,7 @@ pyenv local djangogirls-env
 요건 가상환경과 상관없이, python package manager 명령어인 pip를 사용하여 알 수 있습니다.
 
 ```sh
-pip list
+$ pip list
 ```
 
 ### PyCharm
@@ -87,7 +87,7 @@ pip list
 쟝고 스터디를 하려면 쟝고프레임워크를 깔아야겠죠! 위의 파이썬 개발환경 구축이 정상적으로 완료되었다면, `pip` 명령어를 통해서 Django 를 설치할 수 있습니다.
 
 ```sh
-pip install Django
+$ pip install Django
 ```
 
 이제 개발환경 셋팅이 끝났다면, 본격적으로 Django 스터디를 시작하죠 :)
@@ -120,12 +120,12 @@ Django는 파이썬으로 만들어진 **무료 오픈소스 웹 애플리케이
 
 자 이제 Django 프로젝트를 만들어봅시다. 프로젝트의 이름은 `mysite`로 하고, 위치는 현재 위치(~/projects/djangogirls)에서 시작하죠.
 ```sh
-django-admin startproject mysite .
+$ django-admin startproject mysite .
 ```
 
 그리고 나서 현재 위치를 살펴보면?!
 ```sh
-ls -al
+$ ls -al
 ```
 
 ![image](/images/django/django_startproject.png)
@@ -157,7 +157,7 @@ Django 프로젝트를 진행하면서 필요한 기능 (Application 추가, Dat
 이 django 프로젝트를 실제 브라우저환경에서 보려고 하면 어떻게 해야할까요? 아까 `manage.py`를 설명하면서 이 스크립트 파일을 사용하면 별도 설치 없이 웹 서버를 시작할 수 있다고 했습니다 :) 한 번 실제로 그렇게 되는지 살펴보죠.
 
 ```sh
-python manage.py runserver
+$ python manage.py runserver
 ```
 
 > 팁!
@@ -186,7 +186,7 @@ python manage.py runserver
 한 프로젝트에 다수의 Application들이 추가하려면 어떻게 해야할까요? 앞서 소개되었던 `manage.py`가 이미 Application을 생성하는 명령어를 가지고 있습니다. blog Application을 추가하기 위해 `manage.py`에 포함된 `startapp` 이라는 명령어를 사용해봅시다.
 
 ```sh
-python manage.py startapp blog
+$ python manage.py startapp blog
 ```
 
 ![image](/images/django/django_girls_add_blog.png)
@@ -282,7 +282,7 @@ python에서 정의할 수 있는 method는 instance method/static method/class 
 아까 Application을 추가한 것처럼, 프로젝트를 관리하는 `manage.py`에게 database에 변동사항이 있어! 라고 알려줍시다.
 
 ```sh
-python manage.py makemigrations blog
+$ python manage.py makemigrations blog
 ```
 
 그럼 다음과 같은 오류문구가 나타납니다.
