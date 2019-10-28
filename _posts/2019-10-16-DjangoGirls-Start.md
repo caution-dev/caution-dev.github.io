@@ -57,14 +57,14 @@ pyenv local djangogirls-env
 
 오, 위의 명령어를 치고 나면 사용하고 있는 `console`이 이전과 조금 달라진 것을 알아채셨나요?
 
-![image](../images/django/pyenv.png)
+![image](/images/django/pyenv.png)
 
 명령어를 치기 전에는 일반적인 디렉토리를 탐색하는 콘솔이었지만, 명령어를 입력하고 나니 python 가상환경 안으로 들어왔습니다!
 
 #### 가상환경 확인하기
 앞서 말했다시피 다양한 `python` 가상환경을 구축할 수 있기 때문에, 현재 가상환경이 어떤 걸 구동한 건지 궁금할 때가 있겠죠? 그럴땐 `pyenv version`을 사용합니다.
 
-![image](../images/django/pyenv_version.png)
+![image](/images/django/pyenv_version.png)
 
 오.. 생각보다 많은 가상환경이 있었어요 XD. 그 중 현재 구동되어 있는 가상환경 앞에 * 표시가 붙습니다.
 
@@ -128,10 +128,10 @@ django-admin startproject mysite .
 ls -al
 ```
 
-![image](../images/django/django_startproject.png)
+![image](/images/django/django_startproject.png)
 짜잔~ django 프로젝트에 필요한 파일들이 설치되었습니다. 그리고 이제 이 폴더를 PyCharm에서 열어보죠.
 
-![image](../images/django/django_girls_hierarch.png)
+![image](/images/django/django_girls_hierarch.png)
 
 간단하게 살펴보면, 프로젝트를 생성한 가장 최상위 프로젝트 루트인 `djangogirls`가 있고, 프로젝트를 시작할 때 적어주었던 `mysite`라는 이름을 가진 패키지가 있습니다. 그리고 파이썬 관련 버전을 나타내는 듯한 `.python-version`파일이 있고, `manage.py`파일이 있군요.
 
@@ -149,7 +149,7 @@ Django 프로젝트를 진행하면서 필요한 기능 (Application 추가, Dat
 #### urls.py
 `urls.py`는 왠지 이름에서 부터 그 역할을 유추할 수 있을 것 같죠? 바로 이 프로젝트의 url들을 관리하는 파일입니다. 한 번 열어보면?
 
-![image](../images/django/django_girls_url.png)
+![image](/images/django/django_girls_url.png)
 
 오잉, 아무것도 만들지 않았는데 이미 `admin`이라는 url path가 있군요. 이미 우릴 위해 만들어진 admin 페이지가 있는 건 아닐까요?
 
@@ -164,7 +164,7 @@ python manage.py runserver
 > PyCharm 하단 툴바의 Terminal을 누르면 console을 사용할 수 있습니다.
 > PyCharm 과 다른 console 프로그램을 열지 않아도 되서 간편하죠?
 
-![image](../images/django/django_girls_runserver.png)
+![image](/images/django/django_girls_runserver.png)
 
 오옹.. 문구를 살펴보니 **파일 변화를 StatReloader**가 지켜본다고 이야기 하고, 시스템 체크가 끝난다음... 알 수 없는 경고 문구가 뜬 다음 **http://127.0.0.1:8000/**에 서버가 시작했다고 알려주네요!
 
@@ -172,7 +172,7 @@ python manage.py runserver
 
 진짜 서버가 떳는지 궁금하다면? [http://127.0.0.1:8000/](http://127.0.0.1:8000/)를 열어봅시다!
 
-![image](../images/django/django_girls_localhost.png)
+![image](/images/django/django_girls_localhost.png)
 
 오.. 아무것도 하지 않았는데 Django 프로젝트를 시작한 것 만으로도 **웹 서버를 띄우고**, **localhost에 admin**페이지가 뜨는군요!
 
@@ -189,7 +189,7 @@ python manage.py runserver
 python manage.py startapp blog
 ```
 
-![image](../images/django/django_girls_add_blog.png)
+![image](/images/django/django_girls_add_blog.png)
 
 오 프로젝트에 또 다른 패키지가 생겼네요. 이 패키지는 `migrations`라는 하위 패키지를 가지고 있고, `admin.py`, `apps.py`, `models.py`, `test.py`, `view.py` 를 가지고 있네요.
 
@@ -217,7 +217,7 @@ class Post(models.Model):
         return self.title
 ```
 
-네 이렇게 따라서 치시면 아마 빨간줄로 뭐가 없어~~라고 PyCharm이 알려줄거에요. ![image](../images/django/django_girls_add_model_post_1.png)
+네 이렇게 따라서 치시면 아마 빨간줄로 뭐가 없어~~라고 PyCharm이 알려줄거에요. ![image](/images/django/django_girls_add_model_post_1.png)
 
 그럼 `import this name`을 눌러줍시다. (혹은 Alt + Enter) 요렇게 두 번만 하면?
 
@@ -287,11 +287,11 @@ python manage.py makemigrations blog
 
 그럼 다음과 같은 오류문구가 나타납니다.
 
-![image](../images/django/django_girls_add_model_post_2.png)
+![image](/images/django/django_girls_add_model_post_2.png)
 
 음????? 아냐 나 blog 앱 만들었는데? 혹시 제가 누락한 것 같으니까 다시 만들어봅시다.
 
-![image](../images/django/django_girls_add_model_post_3.png)
+![image](/images/django/django_girls_add_model_post_3.png)
 
 ㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎ 있는데 왜 찾지를 못하니..!!!!!!!
 
@@ -301,15 +301,15 @@ Application을 생성하는 것은 자동으로 해주지만, **모든 Applicati
 
 `settings.py`에 'blog'라는 이름의 application이 포함될 거라고 적어줍시다. 한 줄을 비운 이유는 기존 django 모듈들과 구분하고자 한 줄을 비워두었습니다.
 
-![image](../images/django/django_girls_add_model_post_4.png)
+![image](/images/django/django_girls_add_model_post_4.png)
 
 자 이제 `blog` Application도 넣었으니 다시 migration 명령어를 입력해봅시다. `blog/migrations/0001_initial.py`라는 처음 보는 파일 이름에 - Create model Post 를 보여주고 마무리가 됩니다.
 
-![image](../images/django/django_girls_add_model_post_5.png)
+![image](/images/django/django_girls_add_model_post_5.png)
 
 실제로 프로젝트 네비게이터에서 blog/migrations 폴더 하위에 새로운 파일이 생긴 걸 확인할 수 있습니다.
 
-![image](../images/django/django_girls_add_model_post_6.png)
+![image](/images/django/django_girls_add_model_post_6.png)
 
 #### Database Migration 적용하기
 migration 파일이 생성되었다고 해서 데이터베이스에 적용되는 것은 아닙니다. migration 파일은 일종의 임시저장 이라고 보면 될 것 같아요. 기존에서 현재까지의 변동사항을 하나의 파일로 저장해둡니다.
@@ -322,7 +322,7 @@ migration 파일을 실제 database에 적용하려면, `manage.py`의 migrate �
 python manage.py migrate
 ```
 
-![image](../images/django/django_girls_add_model_post_7.png)
+![image](/images/django/django_girls_add_model_post_7.png)
 
 오.. 제가 생성한 migration 파일은 하나지만, 이 프로젝트에서 사용하는 django 기본 application에 필요한 database migration이 자동으로 진행됩니다.
 
@@ -331,14 +331,14 @@ python manage.py migrate
 #### Database 확인하기
 맨 처음 blog application을 생성했을 때, 프로젝트에 뭔가 새로운 파일이 생긴 것을 알아채셨나요?
 
-![image](../images/django/django_girls_add_model_post_8.png)
+![image](/images/django/django_girls_add_model_post_8.png)
 
 blog application을 추가하면서 database 사용을 위해 blog 패키지 하위에 migrations 패키지가 생긴 것처럼, 프로젝트에서도 database를 사용하기 위해 `db.sqlite3` 파일이 추가되었습니다.
 
 
 Django 프로젝트에서는 `.sqlite3`를 사용해서 Database를 관리하고, 이 파일을 DB Browser SQLite를 통해 열면 Database 내부의 데이터를 확인할 수 있습니다.
 
-![image](../images/django/django_girls_db_1.png)
+![image](/images/django/django_girls_db_1.png)
 
 잘 찾아보면 우리가 만들었던 `blog` application의 `post` model을 나타내는 테이블을 찾을 수 있을거에요.
 
@@ -365,7 +365,7 @@ urlpatterns = [
 
 path(,)의 첫 번째 파라미터는 URL을 나타내고, 두 번째 파라미터는 이에 대응하는 실제 view를 나타냅니다. 이 상태에서 `urls.py`를 저장하면 runserver에서 오류로그가 막 올라옵니다.
 
-![image](../images/django/django_girls_url_2.png)
+![image](/images/django/django_girls_url_2.png)
 
 
 빠밤.. `post_list`라는 걸 찾을 수 없다네요... 역시 인생 쉽지 않아요. ㅜ
@@ -388,7 +388,7 @@ def post_list(request):
 
 이제 실제 브라우저에서 [http://127.0.0.1:8000/post-list/](http://127.0.0.1:8000/post-list/)에 접속해봅시다.
 
-![image](../images/django/django_girls_url_3.png)
+![image](/images/django/django_girls_url_3.png)
 
 잘 뜨시나요? 오와앙 우리의 첫 번째 페이지를 띄우는 데 성공했습니다.
 
@@ -426,7 +426,7 @@ def post_list(request):
 
 메서드를 수정하고 다시 브라우저 화면을 새로고침해볼까요?
 
-![image](../images/django/django_girls_url_4.png)
+![image](/images/django/django_girls_url_4.png)
 
 오옷.... 그런 template을 찾을 수 없다는 군요. 마찬가지로 template 또한 settings.py의 TEMPLATES의 DIRS 하위에 path를 명시해주어야 합니다.
 
@@ -452,7 +452,7 @@ TEMPLATES = [
 
 다시 한 번 돌려볼까요!
 
-![image](../images/django/django_girls_url_5.png)
+![image](/images/django/django_girls_url_5.png)
 
 굳굳! 이런 방식으로 원하는 위치의 html 파일을 불러올 수 있습니다. 나중엔 템플릿 파일을 가지고 동적으로 데이터바인딩하는 부분 또한 다뤄볼 수 있겠네요.
 
@@ -475,7 +475,7 @@ admin.site.register(Post)
 
 오 이게 단가요? 네 이게 답니다. 그럼 이제 [admin 페이지](http://127.0.0.1:8000/admin)에 들어가봅시다.
 
-![image](../images/django/django_girls_admin_1.png)
+![image](/images/django/django_girls_admin_1.png)
 
 음.... 저는 아이디와 비밀번호가 없는뎁쇼? 그럼 이제 만들어봅시다 XD
 
@@ -488,20 +488,20 @@ python manage.py createsuperuser
 
  ```
 그럼 이제 아이디를 뭘 할 건지, 이메일, 비밀번호, 비밀번호 이거 너무 쉬운데 이거 쓸거니 하고 물어봅니다.
-![image](../images/django/django_girls_admin_2.png)
+![image](/images/django/django_girls_admin_2.png)
 
 저는 쿨하게 y했구요. 이제 만든 사용자로 로그인을 해봅시다.
 
 > 혹시 저처럼 비밀번호를 잊어버리신 분이 있다면
 > `python manage.py changepassword`를 사용하여 변경할 수 있으니 걱정마세요!
 
-![image](../images/django/django_girls_admin_3.png)
+![image](/images/django/django_girls_admin_3.png)
 
 우왕! 관리자 페이지가 열렸네요~ 여기에서 새로운 post 를 작성하고 기존 데이터들도 관리할 수 있습니다.
 
 그리고 변경된 데이터는 DB Browser 에서 확인할 수 있다는 점~~ 잊지마시고용!
 
-![image](../images/django/django_girls_admin_4.png)
+![image](/images/django/django_girls_admin_4.png)
 
 
 길고 긴 포스팅이 끝났습니다!!!!!!!!!!
