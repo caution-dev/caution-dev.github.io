@@ -78,6 +78,9 @@ $ python manage.py shell
 그럼 다음과 안내문구가 나타나면서 Django Shell 안쪽으로 들어갈 수 있습니다 :)
 ![images](/images/django/django_girls_django_shell.png)
 
+> 저는 좀 더 향상된 기능을 가진 셸을 사용하기 위해 IPython을 설치해서 사용중입니다  
+> `pip install ipython` 명령으로 IPython을 설치하면, manage.py shell 명령을 실행했을 때, 기본 셸 대신 IPython셸로 실행되어 좀 더 편하게 많은 기능들을 사용할 수 있습니다!
+
 #### Post 데이터 가져오기
 이 `Django Shell`에서는 현재 위치의 `Django Project`에 정의된 Class들에 접근이 가능합니다! 그럼 이제 어떤 포스팅들이 있는지 바로바로 가져와볼게요 :)
 
@@ -89,7 +92,7 @@ Post.objects.all()
 
 ![images](/images/django/django_girls_post_import_error.png)
 
-> 명령어를 입력하는 화면이 저랑 다르더라도 걱정마세요! 원래는 `>>>` 요렇게 시작해야하는 게 맞는데 저는 `ipython`을 설치해서 사용하고 있기 때문에 다른 화면으로 보이는 거랍니다. XD
+> 명령어를 입력하는 화면이 저랑 다르더라도 걱정마세요! 원래는 `>>>` 요렇게 시작해야하는 게 맞는데 저는 `IPython`을 설치해서 사용하고 있기 때문에 다른 화면으로 보이는 거랍니다. XD
 
 이전 시간에 파일에서 다른 파일에 정의된 `class`나 `method`를 가져와야 할 때 어떤 명령어를 맨 위에 써주었습니다! 바로 `import`인데요, 마찬가지로 `Django Shell`에서도 `blog.models`에 정의되어 있는 `Post` `class`를 `import`해줄게요.
 
@@ -101,7 +104,6 @@ from blog.models import Post
 ```python
 In [2]: Post.objects.all()     
 Out[2]: <QuerySet [<Post: Django 스터디 Day 1>, <Post: Django 스터디 Day 2>]>
-
 ```
 
 오, 우리가 작성했던 포스팅이 보이는군요! 포스팅들이 배열`[]`형태로 들어가 있고, 이 포스팅들을 `QuerySet` 이라는 클래스 객체가 가지고 있어요.
@@ -110,29 +112,29 @@ Out[2]: <QuerySet [<Post: Django 스터디 Day 1>, <Post: Django 스터디 Day 2
 
 새로운 `QuerySet` 객체를 만들어봅시다.
 ```python
-In [3]: allPosts = Post.objects.all()
+In [3]: all_posts = Post.objects.all()
 ```
 
 이번에는 아마 포스팅 리스트들이 나타나지 않았을 거에요. 그 상태에서 다음 구문들을 작성해봅시다.
 
 ```python
-In [4]: allPosts.query     
+In [4]: all_posts.query     
 Out[4]: <django.db.models.sql.query.Query at 0x10dc53550>
 
-In [5]: print(allPosts.query)  
+In [5]: print(all_posts.query)  
 SELECT "blog_post"."id", "blog_post"."author_id", "blog_post"."title", "blog_post"."text", "blog_post"."created_date", "blog_post"."published_date" FROM "blog_post"
 ```
 
-`QuerySet` class는 `query`라는 property를 가집니다. 이 `query`가 실제 Database에서 데이터를 불러올 때 사용되는 `SQL Query`입니다. 형태가 조금 다르지만, 위에서 작성했던 SQL문과 유사한 형태를 가지고 있죠? `SELECT` 다음에 어떤 `attribute`들을 출력할 건지 정의하고, `FROM` 구문으로 어떤 테이블에서 데이터를 가져올 건지 명시해주었습니다.
+`QuerySet` class는 `query`라는 attribute를 가집니다. 이 `query`가 실제 Database에서 데이터를 불러올 때 사용되는 `SQL Query`입니다. 형태가 조금 다르지만, 위에서 작성했던 SQL문과 유사한 형태를 가지고 있죠? `SELECT` 다음에 어떤 `attribute`들을 출력할 건지 정의하고, `FROM` 구문으로 어떤 테이블에서 데이터를 가져올 건지 명시해주었습니다.
 
 사실 이 `QuerySet`은 생성될 때마다 Database에서 데이터를 가져오지 않습니다. 우리가 `Post.objects.all()`을 입력했을 때 `QuerySet` 인스턴스가 생성되고, 이 때에는 사실 `query`만을 가지고 있고 데이터를 가지고 있지 않습니다.
 
 > 이걸 검증하고 싶은데 어떻게 검증할 수 있을지 지금 딱 방법이 생각나지 않네요.
 
-하지만 `print(allPosts)`를 입력하면?
+하지만 `print(all_posts)`를 입력하면?
 
 ```python
-In [6]: print(allPosts)
+In [6]: print(all_posts)
 <QuerySet [<Post: Django 스터디 Day 1>, <Post: Django 스터디 Day 2>]>
 ```
 
@@ -150,26 +152,26 @@ In [6]: print(allPosts)
 
 ```python
 # 모든 Post 객체들을 가져오기
-In [7]: allPosts = Post.objects.all()
+In [7]: all_posts = Post.objects.all()
 ```
 
 하지만 내가 **원하는 조건을 가진 `Post`만 가져오려면** 어떻게 해야할까요? 예를 들어, 글쓴이로 검색을 한다고 해보자구요. **내가 작성한 글**만 조회하려면?
 
 ```python
-In [8]: myPosts = Post.objects.get(author=me)
+In [8]: my_post = Post.objects.get(author=me)
 ---------------------------------------------------------------------------
 NameError Traceback (most recent call last)
 <ipython-input-16-eb41f8b5902c> in <module>
-----> 1 myPosts = Post.objects.get(author=me)
+----> 1 my_post = Post.objects.get(author=me)
 
 NameError: name 'me' is not defined
 ```
 
 오 오류가 나타났네요. **me**라는 이름을 가진 객체는 정의되지 않았대요. 이 오류를 잡기 전에 문법을 잠깐 볼까요?
 
-저는 `myPosts`라는 변수에 `Post`객체들 중 `author` property가 `me`에 대응하는 데이터를 가져오도록 명령어를 주었어요. 지난 시간에 `Post`를 정의할 때 `author` 외에 다른 property들이 있었잖아요? title, text, created_date, published_date 모두 다음과 같은 문법으로 사용할 수 있어요.
+저는 `my_post`라는 변수에 `Post`객체들 중 `author` attribute가 `me`에 대응하는 데이터를 가져오도록 명령어를 주었어요. 지난 시간에 `Post`를 정의할 때 `author` 외에 다른 attribute들이 있었잖아요? title, text, created_date, published_date 모두 다음과 같은 문법으로 사용할 수 있어요.
 ```python
-Model.objects.get('조건 대상 property 명'='조건')
+Model.objects.get('조건 대상 attribute 명'='조건')
 ```
 
 자 다시 돌아와서, `author=me`라는 조건을 주려면 현재 사용자 객체(me)를 정의해야 해요. 그러려면 아까 `Post` `class` 를 사용하기 전처럼 `User` `class`를 `import`해줍니다.
@@ -190,11 +192,11 @@ Out[10]: <QuerySet [<User: caution>]>
 
 ```python
 In [11]: me = User.objects.get(username='caution')  
-In [12]: myPosts = Post.objects.get(author=me)
+In [12]: my_post = Post.objects.get(author=me)
 ---------------------------------------------------------------------------
 MultipleObjectsReturned Traceback (most recent call last)
 <ipython-input-20-eb41f8b5902c> in <module>
-----> 1 myPosts = Post.objects.get(author=me)
+----> 1 my_post = Post.objects.get(author=me)
 
 ~/.pyenv/versions/3.6.8/envs/djangogirls-env/lib/python3.6/site-packages/django/db/models/manager.py in manager_method(self, *args, **kwargs)
      80         def create_method(name, method):
@@ -217,8 +219,8 @@ MultipleObjectsReturned: get() returned more than one Post -- it returned 2!
 오오오오오오류다! 오류가 나타났다! 여러분 진정합시다. 오류는 나쁘지 않아요. 오히려 우리를 도외주는 길잡이이죠. 오류의 이름이 뭔가요? `MultipleObjectsReturned` 입니다. 여러 객체가 반환되었다는 거에요. `Get` 명령어의 반환값은 **단일 객체**여야 합니다. 제가 작성한 포스팅이 여러 개이기 때문에 이런 오류가 나타난 거에요. 이럴 경우에는 **filter**를 사용해줍니다. 같은 명령을 get 대신 filter로 바꿔볼게요.
 
 ```python
-In [13]: myPosts = Post.objects.filter(author=me)
-In [14]: print(myPosts)
+In [13]: my_post = Post.objects.filter(author=me)
+In [14]: print(my_post)
 <QuerySet [<Post: Django 스터디 Day 1>, <Post: Django 스터디 Day 2>]>
 ```
 
@@ -237,7 +239,7 @@ In [16]: print(Post.objects.filter(title__contains='Django'))
 <QuerySet [<Post: Django 스터디 Day 1>, <Post: Django 스터디 Day 2>]>
 ```
 
-짜잔 새로운 문법이 나왔습니다. 문법은 title이라는 property로 조건을 줄 건데, 다음 조건을 포함(contains)하는 데이터들을 가져와라~! 하는 의미에요. property에 조건을 더하기 위해서는 언더바`_`가 두 개`__`를 붙이기로 약속했습니다. **DjangoGirls**에 따르면,
+짜잔 새로운 문법이 나왔습니다. 문법은 title이라는 attribute로 조건을 줄 건데, 다음 조건을 포함(contains)하는 데이터들을 가져와라~! 하는 의미에요. attribute에 조건을 더하기 위해서는 언더바`_`가 두 개`__`를 붙이기로 약속했습니다. **DjangoGirls**에 따르면,
 
 > title와 contains 사이에 있는 밑줄(_)이 2개(__)입니다. 장고 ORM은 필드 이름("title")과 연산자과 필터("contains")를 밑줄 2개를 사용해 구분합니다. 밑줄 1개만 입력한다면, FieldError: Cannot resolve keyword title_contains라는 오류가 뜰 거예요.
 
@@ -255,7 +257,7 @@ class Post(models.Model):
     ...
 ```
 
-`author` property는 우리가 만든 class가 아니라 `django.conf.settings`에 정의되어 있는, Key 이름이 `AUTH_USER_MODEL`인 뭔지 알 수 없지만 어떤 class 타입을 가집니다. 그때 이 타입이 바로
+`author` attribute는 우리가 만든 class가 아니라 `django.conf.settings`에 정의되어 있는, Key 이름이 `AUTH_USER_MODEL`인 뭔지 알 수 없지만 어떤 class 타입을 가집니다. 그때 이 타입이 바로
 
 ```python
 In [11]: from django.contrib.auth.models import User
