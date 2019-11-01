@@ -112,7 +112,7 @@ model을 사용해서 `context` 과 `persistentStore`간의 커뮤니케이션�
 
 즉 Core Data Stack이란, CoreData를 이용해서 Model layer를 관리하는 객체들을 아우러 말합니다.
 
-![image](/images/coredata/core_Data_stack.png)
+![image](/images/coredata/core_data_stack.png)
 
 
 와 이론은 여기까지 입니다 :)
