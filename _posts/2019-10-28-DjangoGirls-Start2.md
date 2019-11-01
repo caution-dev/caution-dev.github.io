@@ -26,7 +26,7 @@ comments: true
   * **Order By** : 데이터를 정렬해보기
   * **QuerySet Chaining** : 조건들을 연결하기
 * Dynamic Data Set + Template
-* **최종목표** : `post_list` 페이지에 **발행날짜(publish)**가 **최신**인 포스팅들을 보여주기
+* **최종목표** : `post_list` 페이지에 **발행날짜(`published_date`)**가 **최신**인 포스팅들을 보여주기
 
 목표가 정해졌으니, 차근차근 달려볼까요~
 
@@ -48,7 +48,7 @@ comments: true
 
 이런 기능은 당연히 있어야겠죠? 이런 기능들이 없다면 원하는 포스팅을 찾으려고 할 때 너무 어려울 것 같아요 ㅠ.ㅠ 하지만 또 이걸 일일이 구현하기에는.. 어려울 수도 있다고 생각해요..! 매번 반복문을 돌면서 조건을 걸어서 필터링 할 수도 없고!
 
-그래서 `Django`에서는 자체적으로 Model 객체들을 여러 조건을 주어 검색할 수 있도록 도와주는 **QuerySet** 클래스가 있습니다.
+그래서 `Django`에서는 자체적으로 `Model` 객체들을 여러 조건을 주어 검색할 수 있도록 도와주는 **QuerySet** 클래스가 있습니다.
 
 ### QuerySet
 이전 시간에 `DB Browser for SQLite`를 통해서 Database에 접근했던 걸 기억하시나요? Database의 데이터를 조회하고, 수정하고, 새로운 데이터를 추가할 수 있는데요, 웹 서버에서는 Database GUI Tool을 사용할 수 없기 때문에 직접 프로그래밍 코드로 데이터를 관리할 수 있도록 `SQL(Structured Query Language)`을 사용합니다.
@@ -146,7 +146,7 @@ In [6]: print(all_posts)
 
 대략 정리하자면, `QuerySet` 객체는 내부에 데이터를 가져올 수 있는 `query`문을 가지고 있고, 이 `query`문을 사용하여 데이터베이스의 데이터를 가져옵니다. 한 번 데이터를 가져오고 나면 (데이터가 변경되는 등 새로고침되어야 하는 조건이 발생하지 않았다고 하면) 다시 요청이 들어왔을 때 매번 데이터를 가져오는 것이 아니라 이미 가져온 데이터(a.k.a cached data)를 넘겨줍니다.
 
-`QuerySet`에 대해 간략히 알아봤습니다. 이제 이 `class`를 가지고 데이터를 가지고 놀아 봅시다.
+`QuerySet`에 대해 간략히 알아봤습니다. 이제 본격적으로 `QuerySet`를 가지고 놀아 봅시다.
 
 ### GET: 원하는 데이터 가져오기
 사실 이 기능은 위에서 살짝 해보았습니다. 다시 확인해볼까요?
@@ -170,7 +170,7 @@ NameError: name 'me' is not defined
 
 오 오류가 나타났네요. **me**라는 이름을 가진 객체는 정의되지 않았대요. 이 오류를 잡기 전에 문법을 잠깐 볼까요?
 
-저는 `my_post`라는 변수에 `Post`객체들 중 `author` `attribute`가 `me`에 대응하는 데이터를 가져오도록 명령어를 주었어요. 지난 시간에 `Post`를 정의할 때 `author` 외에 다른 `attribute`들이 있었잖아요? title, text, created_date, published_date 모두 다음과 같은 문법으로 사용할 수 있어요.
+저는 `my_post`라는 변수에 `Post`객체들 중 `author` `attribute`가 `me`에 대응하는 데이터를 가져오도록 명령어를 주었어요. 지난 시간에 `Post`를 정의할 때 `author` 외에 다른 `attribute`들이 있었잖아요? `title`, `text`, `created_date`, `published_date` 모두 다음과 같은 문법으로 사용할 수 있어요.
 ```python
 Model.objects.get('조건 대상 attribute 명'='조건')
 ```
@@ -239,7 +239,7 @@ In [15]: print(Post.objects.filter(title='Django'))
 <QuerySet []>
 ```
 
-`Django`로 시작하는 포스팅은 2개나 있는데, `title`로 filtering 하니까 결과가 나오지 않아요. 왜냐하면 title 이 완벽히 'Django'인 포스팅은 없거든요. 만약 이 **키워드를 포함한 포스팅들을 검색**하려면 어떻게 해야할까요?
+`Django`로 시작하는 포스팅은 2개나 있는데, `title`로 필터링 하니까 결과가 나오지 않아요. 왜냐하면 title 이 완벽히 'Django'인 포스팅은 없거든요. 만약 이 **키워드를 포함한 포스팅들을 검색**하려면 어떻게 해야할까요?
 
 ```python
 In [16]: print(Post.objects.filter(title__contains='Django'))
@@ -272,7 +272,7 @@ In [11]: from django.contrib.auth.models import User
 
 이거였네요! 언젠가 까볼 수 있었으면... 이 말을 왜 꺼냈을까요?
 
-하고 싶었던 이야기는, `Post`라는 모델을 작성할 때 저 `USER`라는 타입을 그대로 가져다 쓰지 않고 `ForeignKey`로 연결해서 사용했다는 점이에요. Database에 대한 이해를 가지고 있으신 분들이라면 아마도 알고 계실 수 있지만, 모르신다면 `Database`의 `Primary Key`와 `Foreign Key` 개념 정도는 확인해주시는 것도, 좋을 것 같아요 :)
+하고 싶었던 이야기는, `Post`라는 모델을 작성할 때 저 `User`라는 타입을 그대로 가져다 쓰지 않고 `ForeignKey`로 연결해서 사용했다는 점이에요. Database에 대한 이해를 가지고 있으신 분들이라면 아마도 알고 계실 수 있지만, 모르신다면 `Database`의 `Primary Key`와 `Foreign Key` 개념 정도는 확인해주시는 것도, 좋을 것 같아요 :)
 
 #### 발행날짜로 필터링하기
 자 우리의 최종 목표가 뭐였는지 기억하시나요? 바로 **발행날짜(`published_date`)가 최신인 포스팅들을 보여주기** 였어요. 그러면 이제 **발행된 포스팅들**을 불러와봅시다.
@@ -288,7 +288,7 @@ Out[13]: <QuerySet []>
 음? 아무 데이터도 없네요? 관리자 페이지에서 데이터를 다시 살펴보죠.
 ![images](/images/django/django_empty_published_date.png)
 
-`published_date`가 비어있네요. `Post` model을 만들 때 `published_date` `attribute`를 `blank=True, null=True`로 주었던 거 기억하세요? 그렇기 때문에 `Post` 객체에 `published_date`는 값이 있을 수도, 없을 수도 있답니다.(그걸 우리는 nullable하다고 합니다.)
+`published_date`가 비어있네요. `Post` model을 만들 때 `published_date` `attribute`를 `blank=True, null=True`로 주었던 거 기억하세요? 그렇기 때문에 `Post` 객체에 `published_date`는 값이 있을 수도, 없을 수도 있답니다.(그걸 우리는 **nullable**하다고 합니다.)
 
 발행된 포스팅들만 보여주어야 하니까 포스팅에 `publish()` `method`를 호출해봅시다.
 
@@ -307,7 +307,11 @@ In [6]: print(all_posts)
 <QuerySet [<Post: Django 스터디 Day 1>, <Post: Django 스터디 Day 2>]>
 ```
 
-`all_post`는 **QuerySet** 인데, `python`의 `List`처럼 `all_posts[0]`문법으로 데이터에 접근할 수 있습니다. 왤까요??? `QuerySet`은 **내부에서 data를 `List`형태로 가지고 있기 때문에**,  `all_posts[0]` 요청이 들어오면 가지고 있는 data에서 0번째에 있는 데이터를 넘겨줍니다! 짱 편하다~!!
+`all_post`는 **QuerySet** `class`의 `instance`인데, `python`의 `List`처럼 `all_posts[0]`문법으로 데이터에 접근할 수 있습니다. 왤까요???
+
+`QuerySet`은 **내부에서 data를 `List`형태로 가지고 있기 때문에**,  `all_posts[0]` 요청이 들어오면 가지고 있는 data에서 0번째에 있는 데이터를 넘겨줍니다!
+
+짱 편하다~!!
 
 ### Create : 새로운 데이터 추가하기
 자 이번에는 새로운 포스팅을 코드로 추가해봅시다!
@@ -331,9 +335,11 @@ Out[18]: <QuerySet [<Post: Django 스터디 Day 1>, <Post: Django 스터디 Day 
 ```
 
 별도 조건을 주지 않으면 날짜가 오래된 순 부터 출력됩니다. 만약 **최신순으로 정렬**하고 싶다면요?
+
+##### 생성날짜로 내림차순 정렬
+
 ```python
 # 내림차순으로 정렬하려면 -를 붙여줍니다.
-##### 생성날짜로 내림차순 정렬
 In [19]: Post.objects.order_by('-created_date')
 Out[19]: <QuerySet [<Post: caution과 함께하는 Django Study>, <Post: Django 스터디 Day 2>, <Post: Django 스터디 Day 1>]>
 ```
@@ -341,6 +347,7 @@ Out[19]: <QuerySet [<Post: caution과 함께하는 Django Study>, <Post: Django 
 `published_date`로 정렬하면 어떨까요? 아까 `filter`를 사용할 때는 `published_date`가 null이면 보여지지 않았어요.
 
 ##### 발행날짜로 오름차순 정렬
+
 ```python
 In [20]: Post.objects.order_by('published_date')
 Out[20]: <QuerySet [<Post: Django 스터디 Day 2>, <Post: caution과 함께하는 Django Study>, <Post: Django 스터디 Day 1>]>
@@ -349,6 +356,7 @@ Out[20]: <QuerySet [<Post: Django 스터디 Day 2>, <Post: caution과 함께하�
 오, `published_date`가 없는 경우에는 맨 앞에 나오네요. 그럼 내림차순으로 할 때는 결과가 다를까요?
 
 ##### 발행날짜로 내림차순 정렬
+
 ```python
 In [21]: Post.objects.order_by('-published_date')
 Out[21]: <QuerySet [<Post: caution과 함께하는 Django Study>, <Post: Django 스터디 Day 1>, <Post: Django 스터디 Day 2>]>
