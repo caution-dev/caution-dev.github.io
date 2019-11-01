@@ -12,11 +12,6 @@ comments: true
 * content
 {:toc}
 
-* [동영상](https://developer.apple.com/videos/play/wwdc2019/214/)
-
-### 요약
-* 코드를 작성하기 전에 디자인을 익히고 기본적으로 제공되는 기능을 활용하는 방법을 알아냅시다. 그런 다음 사용자 정의 할 항목을 찾으세요.
-
 ## Dark Mode의 3가지 요소
 
 ### Color

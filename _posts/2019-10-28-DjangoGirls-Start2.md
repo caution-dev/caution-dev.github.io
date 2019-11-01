@@ -3,7 +3,7 @@ layout: post
 title:  "Django Study Day 2"
 date:   2019-10-28 21:26:06 +0900
 categories: Django
-tags: Backend Django Python
+tags: Backend Django Python Web Programming
 author: Juhee Kim
 mathjax: true
 comments: true
@@ -429,6 +429,8 @@ renderer가 response를 만들 때 사용할 수 있도록 data를 넘겨주긴 
 
 쉬운 것부터 해보자구요. 받아온 데이터를 그대로 출력해보는 건 어때요?
 
+{% raw %}
+
 ```html
 <!doctype html>
 <html lang="ko">
@@ -454,7 +456,7 @@ renderer가 response를 만들 때 사용할 수 있도록 data를 넘겨주긴 
 
  그럼 이제 좀 더 예쁘게 볼 수 있도록 html 코드를 추가해볼게요.
 
-```html
+```python
 ...
   <body>
       <h1>post list</h1>
@@ -483,3 +485,5 @@ renderer가 response를 만들 때 사용할 수 있도록 data를 넘겨주긴 
 오늘 포스팅은 여기까지에요 헤헤헤헤헤
 
 다음 시간에 뵈어용! 긴 포스팅 읽어주셔서 감사합니다. XD
+
+{% endraw %}
