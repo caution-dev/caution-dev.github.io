@@ -130,3 +130,9 @@ NSAttributedString.Key: Any 에서는 foregroundColor에 그냥 Dynamic color �
 webcontent에서는 color-scheme prefers-color-scheme 등의 태그를 사용해서 다크모드에 대응할 수 있다.
 
 필요하다면 다른 세션 있으니까 거기서 찾아보자.
+
+
+* [동영상](https://developer.apple.com/videos/play/wwdc2019/214/)
+
+### 요약
+* 코드를 작성하기 전에 디자인을 익히고 기본적으로 제공되는 기능을 활용하는 방법을 알아냅시다. 그런 다음 사용자 정의 할 항목을 찾으세요.
