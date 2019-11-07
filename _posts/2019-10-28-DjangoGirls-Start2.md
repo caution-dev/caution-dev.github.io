@@ -30,7 +30,7 @@ comments: true
 
 목표가 정해졌으니, 차근차근 달려볼까요~
 
-> 참고로, 이 포스팅 [DjangoGirls]() 튜토리얼 컨텐츠를 기반으로 작성되었습니다.
+> 참고로, 이 포스팅 [DjangoGirls](https://tutorial.djangogirls.org/ko/) 튜토리얼 컨텐츠를 기반으로 작성되었습니다.
 > 해당 포스팅은 다음 컨텐츠들을 포함합니다. [장고 ORM과 쿼리셋(QuerySets](https://tutorial.djangogirls.org/ko/django_orm/) / [템플릿 동적 데이터](https://tutorial.djangogirls.org/ko/dynamic_data_in_templates/) / [장고 템플릿](https://tutorial.djangogirls.org/ko/django_templates/)
 
 
@@ -63,12 +63,12 @@ select * from Post
 
 그래서 `QuerySet`이 뭐냐?
 
-**Query Set은 SQL Query 구문과 그 구문에 대한 데이터를 가지는 class**입니다.
+**QuerySet은 SQL Query 구문과 그 구문에 대한 데이터를 가지는 class**입니다.
 
-아까 모든 포스팅 데이터를 가져오는 SQL query를 작성해보았는데요, 이걸 `Query Set` 형태로 변경해봅시다.
+아까 모든 포스팅 데이터를 가져오는 SQL query를 작성해보았는데요, 이걸 `QuerySet` 형태로 변경해봅시다.
 
 ### Django Interactive Console
-`Query Set` 객체를 직접 만들어보기 전에, `Django Shell`에 들어가볼 거에요.
+`QuerySet`을 사용해보기 전에, `Django Shell`에 들어가볼 거에요.
 
 이전에 `python` 가상환경 안에 들어갔던 것을 기억하나요? 마찬가지로 `Django Shell`에서는 `python` 명령어를 포함해서 `Django`가 지원하는 여러가지 마법같은 명령어들을 사용할 수 있답니다.
 
@@ -148,7 +148,7 @@ In [6]: print(all_posts)
 
 `QuerySet`에 대해 간략히 알아봤습니다. 이제 본격적으로 `QuerySet`를 가지고 놀아 봅시다.
 
-### GET: 원하는 데이터 가져오기
+### Get: 원하는 데이터 가져오기
 사실 이 기능은 위에서 살짝 해보았습니다. 다시 확인해볼까요?
 
 ```python
@@ -239,21 +239,21 @@ In [15]: print(Post.objects.filter(title='Django'))
 <QuerySet []>
 ```
 
-`Django`로 시작하는 포스팅은 2개나 있는데, `title`로 필터링 하니까 결과가 나오지 않아요. 왜냐하면 title 이 완벽히 'Django'인 포스팅은 없거든요. 만약 이 **키워드를 포함한 포스팅들을 검색**하려면 어떻게 해야할까요?
+`Django`로 시작하는 포스팅은 2개나 있는데, `title`로 필터링 하니까 결과가 나오지 않아요. 왜냐하면 `title` 이 완벽히 'Django'인 포스팅은 없거든요. 만약 이 **키워드를 포함한 포스팅들을 검색**하려면 어떻게 해야할까요?
 
 ```python
 In [16]: print(Post.objects.filter(title__contains='Django'))
 <QuerySet [<Post: Django 스터디 Day 1>, <Post: Django 스터디 Day 2>]>
 ```
 
-짜잔 새로운 문법이 나왔습니다. 문법은 `title`이라는 `attribute`로 조건을 줄 건데, 다음 조건을 포함(contains)하는 데이터들을 가져와라~! 하는 의미에요. `attribute`에 조건을 더하기 위해서는 언더바`_`가 두 개`__`를 붙이기로 약속했습니다. **DjangoGirls**에 따르면,
+짜잔 새로운 문법이 나왔습니다. 문법은 `title`이라는 `attribute`로 조건을 줄 건데, 다음 조건을 포함(contains)하는 데이터들을 가져와라~! 하는 의미에요. `attribute`에 조건을 더하기 위해 언더바`_` 두 개`__`를 붙이기로 약속했습니다. **DjangoGirls**에 따르면,
 
 > title와 contains 사이에 있는 밑줄(_)이 2개(__)입니다. 장고 ORM은 필드 이름("title")과 연산자과 필터("contains")를 밑줄 2개를 사용해 구분합니다. 밑줄 1개만 입력한다면, FieldError: Cannot resolve keyword title_contains라는 오류가 뜰 거예요.
 
 라고 알려주네요! 신기하죠? 아주 다양한 조건들을 줄 수 있어요. `QuerySet` 조건이 궁금하다면 [QuerySet API Reference](https://docs.djangoproject.com/en/2.2/ref/models/querysets/)를 참고해봅시다 :) 양은 짱짱 길어요.
 
 #### 잠깐 돌아가는 이야기
-잠깐만요. 우리가 너무 자연스럽게 `User`라는 Model을 사용하고 있지 않나요? 혹시 지난 번 `Post` model을 작성할 때 `author`에 어떤 데이터가 들어갔는지, 기억하나요? 기억이 나지 않는다면, 프로젝트에서 `blog/models.py`를 열어봅시다.
+잠깐만요. 우리가 너무 자연스럽게 `User`라는 model을 사용하고 있지 않나요? 혹시 지난 번 `Post` model을 작성할 때 `author`에 어떤 데이터가 들어갔는지, 기억하나요? 기억이 나지 않는다면, 프로젝트에서 `blog/models.py`를 열어봅시다.
 
 ```python
 from django.conf import settings
@@ -420,10 +420,11 @@ from .models import Post
 
 def post_list(request):
   posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')   
-    return render(request, 'post_list.html')
+  context = {'post_list': posts}
+    return render(request, 'post_list.html', context)
 ```
 
-그리고 나서, `post_lisht.html`을 기반으로 `response`를 `render`할 때 사용할 수 있도록 데이터 `{posts: posts}`를 넘겨줄게요.
+그리고 나서, `post_lisht.html`을 기반으로 `response`를 `render`할 때 사용할 데이터를 `Key-Value` 데이터 타입인 `Dictionary` 형태로 넘겨줄거에요. 데이터는 `context`라는 변수에 담아서 넘겨주는 문법입니다.
 
 ## 발행날짜가 최신인 포스팅들을 보여주기
 자! 이제 다시 [post-list 화면](http://127.0.0.1:8000/post-list/)에 들어가 볼까요?
@@ -451,7 +452,7 @@ renderer가 response를 만들 때 사용할 수 있도록 data를 넘겨주긴 
     </head>
     <body>
         <h1>post list</h1>
-        {{ posts }}
+        {{ post_list }}
     </body>
 </html>
 ```
@@ -468,7 +469,7 @@ renderer가 response를 만들 때 사용할 수 있도록 data를 넘겨주긴 
 ...
   <body>
       <h1>post list</h1>
-      {% for post in posts %}
+      {% for post in post_list %}
           <div>
               <p>published: {{ post.published_date }}</p>
               <h1><a href="">{{ post.title }}</a></h1>

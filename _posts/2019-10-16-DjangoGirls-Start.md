@@ -3,7 +3,7 @@ layout: post
 title:  "Django Study Day 1"
 date:   2019-10-16 00:26:06 +0900
 categories: Django
-tags: Backend Django Python
+tags: Backend Django Python Web Programming
 author: Juhee Kim
 mathjax: true
 comments: true
@@ -28,11 +28,11 @@ comments: true
 ### python 프로젝트 가상환경 생성하기
 위의 포스팅을 잘 따라하셨다면, 파이썬 버전 관리 시스템인 `pyenv`와, 가상환경 분리에 필요한 `pyenv-virtualenv` 가 설치되었을 것 같네요.
 
-이제 새로운 python 프로젝트를 위한 가상환경을 만드는 것으로, 포스팅을 본격적으로 시작해봅시다 :)
+이제 새로운 `python` 프로젝트를 위한 가상환경을 만드는 것으로, 포스팅을 본격적으로 시작해봅시다 :)
 
 #### 새로운 가상환경 생성
 `python` 버전은 3.6.8을 사용하고, 이름은 djangogirls-env 인 가상환경을 만들어봅시다.
-```sh
+```python
 $ pyenv virtualenv 3.6.8 djangogirls-env
 ```
 
@@ -41,7 +41,7 @@ $ pyenv virtualenv 3.6.8 djangogirls-env
 
 이번 Django 스터디에서는 가장 최상위 루트를 **projects**로 명명하기로 했어요. 그리고 가장 첫 번째 프로젝트의 이름은 **djangogirls**입니다. 여기에 맞게 폴더구조를 먼저 구성합시다.
 
-```sh
+```python
 $ cd ~/
 $ mkdir projects
 $ cd projects
@@ -51,7 +51,7 @@ $ cd djangogirls
 
 이제 `djangogirls`에서, 앞서 만들었던 `djangogirls-env` 가상환경을 구동시킵시다.
 
-```sh
+```python
 $ pyenv local djangogirls-env
 ```
 
@@ -59,7 +59,7 @@ $ pyenv local djangogirls-env
 
 ![image](/images/django/pyenv.png)
 
-명령어를 치기 전에는 일반적인 디렉토리를 탐색하는 콘솔이었지만, 명령어를 입력하고 나니 python 가상환경 안으로 들어왔습니다!
+명령어를 치기 전에는 일반적인 디렉토리를 탐색하는 콘솔이었지만, 명령어를 입력하고 나니 python` 가상환경 안으로 들어왔습니다!
 
 #### 가상환경 확인하기
 앞서 말했다시피 다양한 `python` 가상환경을 구축할 수 있기 때문에, 현재 가상환경이 어떤 걸 구동한 건지 궁금할 때가 있겠죠? 그럴땐 `pyenv version`을 사용합니다.
@@ -69,9 +69,9 @@ $ pyenv local djangogirls-env
 오.. 생각보다 많은 가상환경이 있었어요 XD. 그 중 현재 구동되어 있는 가상환경 앞에 * 표시가 붙습니다.
 
 그럼 **이 가상환경에 어떤 패키지가 포함되어 있는지 확인하려면 어떻게 해야할까요?**
-요건 가상환경과 상관없이, python package manager 명령어인 pip를 사용하여 알 수 있습니다.
+요건 가상환경과 상관없이, python package manager 명령어인 `pip`를 사용하여 알 수 있습니다.
 
-```sh
+```python
 $ pip list
 ```
 
@@ -86,7 +86,7 @@ $ pip list
 ### Django
 쟝고 스터디를 하려면 쟝고프레임워크를 깔아야겠죠! 위의 파이썬 개발환경 구축이 정상적으로 완료되었다면, `pip` 명령어를 통해서 Django 를 설치할 수 있습니다.
 
-```sh
+```python
 $ pip install Django
 ```
 
@@ -119,12 +119,12 @@ Django는 파이썬으로 만들어진 **무료 오픈소스 웹 애플리케이
 ### Django Project 생성하기
 
 자 이제 Django 프로젝트를 만들어봅시다. 프로젝트의 이름은 `mysite`로 하고, 위치는 현재 위치(~/projects/djangogirls)에서 시작하죠.
-```sh
+```python
 $ django-admin startproject mysite .
 ```
 
 그리고 나서 현재 위치를 살펴보면?!
-```sh
+```python
 $ ls -al
 ```
 
@@ -142,7 +142,7 @@ Django 프로젝트를 진행하면서 필요한 기능 (Application 추가, Dat
 #### settings.py
 `mysite` 패키지 하위에는 `settings.py`라는 파일이 있는데요, 이 파일은 웹사이트와 관련된 설정을 작성하는 파일입니다.
 
-처음 프로젝트를 생성한 상태에서 이 파일을 열어보게 되면 엄청난 양의 기본코드들이 들어가 있습니다. 이 프로젝트에 필요한 django 어플리케이션들이나, middleware, database, language-code 등 다양한 기본 설정들이 들어가 있습니다.
+처음 프로젝트를 생성한 상태에서 이 파일을 열어보게 되면 엄청난 양의 기본코드들이 들어가 있습니다. 이 프로젝트에 필요한 django 어플리케이션들이나, middleware, Database, language-code 등 다양한 기본 설정들이 들어가 있습니다.
 
 추가적으로 필요한 설정들이 있다면 여기에서 수정할 수 있습니다.
 
@@ -156,7 +156,7 @@ Django 프로젝트를 진행하면서 필요한 기능 (Application 추가, Dat
 ### Django 서버 구동하기
 이 django 프로젝트를 실제 브라우저환경에서 보려고 하면 어떻게 해야할까요? 아까 `manage.py`를 설명하면서 이 스크립트 파일을 사용하면 별도 설치 없이 웹 서버를 시작할 수 있다고 했습니다 :) 한 번 실제로 그렇게 되는지 살펴보죠.
 
-```sh
+```python
 $ python manage.py runserver
 ```
 
@@ -185,7 +185,7 @@ $ python manage.py runserver
 ### Application 추가하기
 한 프로젝트에 다수의 Application들이 추가하려면 어떻게 해야할까요? 앞서 소개되었던 `manage.py`가 이미 Application을 생성하는 명령어를 가지고 있습니다. blog Application을 추가하기 위해 `manage.py`에 포함된 `startapp` 이라는 명령어를 사용해봅시다.
 
-```sh
+```python
 $ python manage.py startapp blog
 ```
 
@@ -274,14 +274,14 @@ class Post(models.Model):
 `Post` class에는 총 두 개의 instance method가 정의되어 있습니다. 첫 번째로 포스팅을 발행(publish)하는 메서드, 그리고 인스턴스 클래스를 나타낼 때 사용하는 Description 메서드(일명 매직메서드래요).
 
 
-python에서 정의할 수 있는 method는 instance method/static method/class method의 3 종류가 있는데, 다음에 python 문법을 살펴보면서 좀 더 자세히 알아봅시다.
+`python`에서 정의할 수 있는 method는 instance method/static method/class method의 3 종류가 있는데, 다음에 `python` 문법을 살펴보면서 좀 더 자세히 알아봅시다.
 
 ### Database Migration
-자 이제 열심히 새로운 Model 클래스를 생성했으니까, 이걸 database에 적용해봅시다. 이렇게 새로운 변경사항을 database에 적용하는 걸 `migration`이라고 부릅니다.
+자 이제 열심히 새로운 Model 클래스를 생성했으니까, 이걸 Database에 적용해봅시다. 이렇게 새로운 변경사항을 Database에 적용하는 걸 `migration`이라고 부릅니다.
 
-아까 Application을 추가한 것처럼, 프로젝트를 관리하는 `manage.py`에게 database에 변동사항이 있어! 라고 알려줍시다.
+아까 Application을 추가한 것처럼, 프로젝트를 관리하는 `manage.py`에게 Database에 변동사항이 있어! 라고 알려줍시다.
 
-```sh
+```python
 $ python manage.py makemigrations blog
 ```
 
@@ -316,15 +316,15 @@ migration 파일이 생성되었다고 해서 데이터베이스에 적용되는
 
 이후에 다른 변동사항이 생긴다면, 또 다른 migration 파일을 생성해서 관리할 수 있습니다.
 
-migration 파일을 실제 database에 적용하려면, `manage.py`의 migrate 명령을 사용할 수 있습니다.
+migration 파일을 실제 Database에 적용하려면, `manage.py`의 migrate 명령을 사용할 수 있습니다.
 
 ```python
-python manage.py migrate
+$ python manage.py migrate
 ```
 
 ![image](/images/django/django_girls_add_model_post_7.png)
 
-오.. 제가 생성한 migration 파일은 하나지만, 이 프로젝트에서 사용하는 django 기본 application에 필요한 database migration이 자동으로 진행됩니다.
+오.. 제가 생성한 migration 파일은 하나지만, 이 프로젝트에서 사용하는 django 기본 application에 필요한 Database migration이 자동으로 진행됩니다.
 
 자 그럼 이제 migration이 끝났는데, 그 결과를 어디가야 볼 수 있을까요?
 
@@ -333,7 +333,7 @@ python manage.py migrate
 
 ![image](/images/django/django_girls_add_model_post_8.png)
 
-blog application을 추가하면서 database 사용을 위해 blog 패키지 하위에 migrations 패키지가 생긴 것처럼, 프로젝트에서도 database를 사용하기 위해 `db.sqlite3` 파일이 추가되었습니다.
+blog application을 추가하면서 Database 사용을 위해 blog 패키지 하위에 migrations 패키지가 생긴 것처럼, 프로젝트에서도 Database를 사용하기 위해 `db.sqlite3` 파일이 추가되었습니다.
 
 
 Django 프로젝트에서는 `.sqlite3`를 사용해서 Database를 관리하고, 이 파일을 DB Browser SQLite를 통해 열면 Database 내부의 데이터를 확인할 수 있습니다.
