@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  ""
+title:  "SwiftUI Data Flow"
 date:   2021-03-09 00:26:06 +0900
 categories: iOS
 tags: iOS Swift SwiftUI Combine
