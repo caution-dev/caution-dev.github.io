@@ -32,11 +32,11 @@ ReplayKit은 HD급 비디오를 제공합니다.
 - Face Time 카메라를 녹화할 수 있으며, 마이크 녹음 API를 향상시킴
 
 ### ReplayKit Architecture
-![image](https://media.oss.navercorp.com/user/13958/files/fc867780-8e54-11eb-9104-b6c07b133d2b)
+![images](/images/replayKit/replaykit_wwdc_00.png)
 애플리케이션에서 운영체제를 통해 레코딩을 시작하려면 RPScreenRecorder을 통해 녹화를 시작할 수 있다.
 녹화가 시작되면 Replay Daemon 으로 메세지가 전달되고 앱의 데이터를 Movie file에 쓰기 시작한다.
 
-![image](https://media.oss.navercorp.com/user/13958/files/1d4ecd00-8e55-11eb-9279-e324f3f2d091)
+![images](/images/replayKit/replaykit_wwdc_01.png)
 애플리케이션이 녹화를 중지하면 Replay Daemon이 쓰기를 종료하고 완성된 Movie file을 Application 단으로 돌려주기 위해 `RPPreviewViewController`를 제공한다.
 이 뷰 컨트롤러를 통해 사용자들은 영상을 미리 보면서 편집하고, 공유할 수 있다.
 
@@ -120,7 +120,7 @@ PreviewController에 날라가면 같이 제거됨.
 iOS에서는 마이크와 카메라를 제공하여 FaceTime 카메라를 사용해 해설을 제공할 수도 있다.
 컨텐츠는 broadcast service를 통해서만 접근 가능하며 매우매우 안전하다.
 
-![image](https://media.oss.navercorp.com/user/13958/files/ae29a680-8e5d-11eb-8b9b-fdc12962b839)
+![images](/images/replayKit/replaykit_wwdc_02.png)
 
 ### Initiating a Broadcast
 ```swift
@@ -247,7 +247,7 @@ Add Target -> iOS/tvOS -> Application Extension -> Broadcast UI Extension / Broa
 서버에 업로드
 브로드 캐스트 서비스와 연관된 다른 필요한 요소들을 구현할 것.
 
-![image](https://media.oss.navercorp.com/user/13958/files/930d6580-8e62-11eb-84bb-8bae5826ff64)
+![images](/images/replayKit/replaykit_wwdc_03.png)
 
 #### 추가 옵션
 FaceTime camera 지원
