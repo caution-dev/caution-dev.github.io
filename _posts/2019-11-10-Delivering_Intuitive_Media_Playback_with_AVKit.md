@@ -3,7 +3,7 @@ layout: post
 title:  "Delivering Intuitive Media Playback with AVKit"
 date:   2019-11-06 21:26:06 +0900
 categories: iOS
-tags: iOS WWDC Link WebKit
+tags: iOS AVKit WWDC
 author: Juhee Kim
 mathjax: true
 comments: true

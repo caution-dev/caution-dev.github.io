@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "[AVKit] AVPlayer"
+title:  "[AVKit] AVPlayerViewController"
 date:   2019-05-06 17:16:06 +0900
 categories: Apple-Docs
 tags: iOS Audio 번역 AVKit
