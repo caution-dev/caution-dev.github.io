@@ -1,0 +1,92 @@
+---
+layout: post
+title:  "[ARC] Unowned vs Weak"
+date:   2021-04-11 00:26:06 +0900
+categories: Swift
+tags: iOS 면접준비 strong weak Swift
+author: Juhee Kim
+mathjax: true
+comments: true
+---
+
+* content
+{:toc}
+
+안녕하세요! caution입니다.
+
+Swift 5.0 부터 unowned 가 Optional Type이 가능해졌잖아요.
+앗 그럼 weak랑 뭐가 많이 다른 거지.. 하고 간만에 ARC 문서를 읽어보았숩니다.
+번역은 나중에하고 본론으로 :0
+
+weak 와 unowned 모두 Reference Count를 증가시키지 않습니다.
+weak의 경우 참조된 객체가 deinit 될 경우 ARC에 의해 nil 로 변경됩니다.
+하지만 unowned는 deinit 되어도 ARC가 nil로 변경해주지 않습니다.
+그래서 이미 해제된 객체에 접근하려고 하기 때문에 `BAD ACCESS` runtime error가 발생합니다.
+
+unowned의 정의 자체는 동일한데, Type이 Optional 이 되었다는 것은 무엇이냐.
+예전에는 weak와 unowned의 가장 큰 차이가 **Optional인지 여부**였습니다. 하지만 이제 unowned도 **Optional Type이 가능**해졌죠. 그 말은 의도적으로 nil 인 경우도 가능하다는 의미인데, 한국어가 어려우니 예시를 들어봅시다.
+
+### Unowned Optional References Example
+대학교를 생각해봅시다. 각 학부는 정해진 전공 과목들이 있고, 각 과목에는 후행되는 과목 (DB1 -> DB2 -> DB 심화)이 **있을 수 있습니다.** 물론 없을 수도 있죠.
+
+이걸 다음과 같이 정의해봅시다.
+
+```swift
+class Department {
+    var name: String
+    var courses: [Course]
+    init(name: String) {
+        self.name = name
+        self.courses = []
+    }
+}
+
+class Course {
+    var name: String
+    unowned var department: Department
+    unowned var nextCourse: Course?
+    init(name: String, in department: Department) {
+        self.name = name
+        self.department = department
+        self.nextCourse = nil
+    }
+}
+```
+
+하지만 이 과목들은 부서가 없다면 존재하지 않습니다. 공통 교양과목이 아니라 전공과목이라 생각해보자구요. 그래서 department는 course보다 **길거나 같은** 생명주기를 따릅니다. 과목은 있거나 없어질 수 있지만, 전공 과목인데 전공 부서가 없는 건 이상하잖아요.
+
+그래서 `unowned`로 정의해주었습니다.
+
+마찬가지로 후행 과목도, DB1이 없는데 DB2 가 있는 건 이상하니까 후행 과목이 선행 과목보다 **길거나 같은 생명주기**를 가진다고 생각합니다. `department`와 같이 동일 논리로 `unowned`로 정의해주고 싶은데, 문제는 후행 학습이 있을 수도 있고, 없을 수도 있다는 거죠 :0 그래서 `Optional<Course>`로 후행 학습의 타입을 결정해주었습니다.
+
+```Swift
+let department = Department(name: "Horticulture")
+
+let intro = Course(name: "Survey of Plants", in: department)
+let intermediate = Course(name: "Growing Common Herbs", in: department)
+let advanced = Course(name: "Caring for Tropical Plants", in: department)
+
+intro.nextCourse = intermediate
+intermediate.nextCourse = advanced
+department.courses = [intro, intermediate, advanced]
+```
+
+이런식으로 unowned relationship을 구성해줄 수 있습니다.
+마지막 과목인 `advanced`는 후행 과목이 없기 때문에 셋해주지 않았습니다.
+
+이들간의 관계도는 다음과 같습니다.
+
+![image](https://docs.swift.org/swift-book/_images/unownedOptionalReference_2x.png)
+
+이렇게 보면 `unowned`가 Optional이 될 수 있는 것이 뭔가 당연한데, Swift 5 이전에는 이런 경우에 `weak`를 썼던 걸까요? :0? 궁그미.. 누군가는 필요하다고 생각하니 추가되었겠지요.
+
+사실 어떤 객체와 다른 객체의 관계에 대한 생명주기를 확신하기 어려워 `unowned`는 잘 쓰지 않았었는데, 용기를 가지고 시도해봐야겠어요.
+
+결국 weak와 unowned의 가장 큰 차이! 는 이제 `ARC`에 의해 nil로 변경이 되냐 안 되냐의 차이만 남았네요.
+
+오히려 더 clear~~ 해진 느낌 ><
+
+그럼 이만 뿅!
+
+### 참조
+ * [ARC Summary](https://docs.swift.org/swift-book/LanguageGuide/AutomaticReferenceCounting.html)
