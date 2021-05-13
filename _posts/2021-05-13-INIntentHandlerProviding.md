@@ -53,11 +53,3 @@ SiriKit에게 주어진 intent를 처리할 수 있는 객체를 제공합니다
 Inetent 익스텐션을 구성하기 위한 클래스를 배워봅시다.
 * [Providing Hands-Free App Control with Intents](https://developer.apple.com/documentation/sirikit/creating_an_intents_app_extension)
 익스텐션 없이 intent를 해결하고 / 확정하고 / 처리해봅시다.
-
-
-이거 다 읽으면... 튜토리얼 플젝 하나 만들어보려구요
-맨날 문서만 읽고 정리는 안 하는 듯 하여 ㅎ ㅡㅎ
-
-저 링크를 다 읽으면 저의 블로그 링크로 교체됩니다. 이전까지는 원본 문서 링크로 연결됩니다.
-
-그럼 이만! 뿅!
