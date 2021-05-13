@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Go Live with ReplayKit"
-date:   2021-03-26 17:26:06 +0900
+date:   2021-03-26 17:26:16 +0900
 categories: Swift
 tags: iOS ReplayKit Swift Apple WWDC
 author: Juhee Kim
@@ -11,8 +11,6 @@ comments: true
 
 * content
 {:toc}
-
-
 
 [영상 링크](https://developer.apple.com/videos/play/wwdc2016/601/)
 
